@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firas Jaadari — Senior AI / ML Engineer</title>
+  <meta name="description" content="Senior AI/ML Engineer building production LLM systems — RAG, agents, fine-tuning, and inference optimization. Currently at Crédit Agricole." />
+  <meta name="author" content="Firas Jaadari" />
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Firas Jaadari — Senior AI / ML Engineer" />
+  <meta property="og:description" content="Building production LLM systems — RAG, agents, fine-tuning, inference optimization." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@200..800&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ------------------------------------------------------------------ */
+    /*  TOKENS                                                            */
+    /* ------------------------------------------------------------------ */
+    :root {
+      --bg: #0a0a0b;
+      --bg-soft: #131316;
+      --bg-card: #15151a;
+      --ink: #ebe9e3;
+      --ink-mid: #a8a59c;
+      --ink-dim: #6b6863;
+      --ink-faint: #3a3833;
+      --rule: #1f1f24;
+      --accent: #ff5b1e;
+      --accent-soft: rgba(255, 91, 30, 0.12);
+
+      --display: "Fraunces", "Times New Roman", serif;
+      --body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+      --maxw: 1280px;
+      --gutter: clamp(1.25rem, 4vw, 4rem);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  RESET / BASE                                                      */
+    /* ------------------------------------------------------------------ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+      font-weight: 400;
+      overflow-x: hidden;
+      letter-spacing: -0.005em;
+    }
+    /* Subtle film grain overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      mix-blend-mode: overlay;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    ::selection { background: var(--accent); color: var(--bg); }
+
+    /* ------------------------------------------------------------------ */
+    /*  LAYOUT PRIMITIVES                                                 */
+    /* ------------------------------------------------------------------ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    /* Editorial section: label in left margin, content offset */
+    .section {
+      padding-block: clamp(4rem, 10vh, 8rem);
+      border-top: 1px solid var(--rule);
+      position: relative;
+    }
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    @media (min-width: 900px) {
+      .section-grid {
+        grid-template-columns: 200px 1fr;
+        gap: 4rem;
+      }
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-dim);
+      padding-top: 0.5rem;
+    }
+    .section-label .num {
+      color: var(--accent);
+      margin-right: 0.5em;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  NAV                                                               */
+    /* ------------------------------------------------------------------ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      background: rgba(10, 10, 11, 0.65);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .nav.scrolled { border-bottom-color: var(--rule); }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 1rem;
+    }
+    .nav-mark {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mid);
+    }
+    .nav-mark .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 0.6rem;
+      box-shadow: 0 0 0 0 var(--accent);
+      animation: pulse 2.4s ease-out infinite;
+      vertical-align: middle;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255, 91, 30, 0.5); }
+      70%  { box-shadow: 0 0 0 9px rgba(255, 91, 30, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 91, 30, 0); }
+    }
+    .nav-links {
+      display: none;
+      gap: 1.75rem;
+    }
+    @media (min-width: 760px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a .num { color: var(--accent); margin-right: 0.4em; }
+
+    /* ------------------------------------------------------------------ */
+    /*  HERO                                                              */
+    /* ------------------------------------------------------------------ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 7rem;
+      padding-bottom: 5rem;
+      position: relative;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s ease-out forwards;
+    }
+    .hero-meta span { position: relative; }
+    .hero-meta span + span::before {
+      content: "";
+      position: absolute;
+      left: -0.75rem;
+      top: 50%;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+      transform: translateY(-50%);
+    }
+
+    .hero-title {
+      font-family: var(--display);
+      font-weight: 350;
+      font-size: clamp(2.6rem, 8vw, 6.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      max-width: 14ch;
+      font-variation-settings: "opsz" 144, "SOFT" 50;
+      opacity: 0;
+      animation: fadeUp 1s 0.25s ease-out forwards;
+    }
+    .hero-title .ital {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+    }
+
+    .hero-sub {
+      margin-top: 2rem;
+      max-width: 56ch;
+      font-size: clamp(1rem, 1.4vw, 1.18rem);
+      line-height: 1.55;
+      color: var(--ink-mid);
+      opacity: 0;
+      animation: fadeUp 1s 0.45s ease-out forwards;
+    }
+    .hero-sub strong { color: var(--ink); font-weight: 600; }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 1s 0.65s ease-out forwards;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--ink-faint);
+      color: var(--ink);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: "→";
+      transition: transform 0.25s ease;
+    }
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn:hover::after { transform: translateX(4px); }
+    .btn.primary {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+    .btn.primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .hero-floor {
+      position: absolute;
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 0.85s ease-out forwards;
+    }
+    .scroll-hint {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .scroll-hint::before {
+      content: "";
+      width: 1px;
+      height: 36px;
+      background: var(--ink-dim);
+      animation: scrollLine 2.4s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(0.3); transform-origin: top; }
+      50%      { transform: scaleY(1); transform-origin: top; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  ABOUT (NOW)                                                       */
+    /* ------------------------------------------------------------------ */
+    .now-body {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: clamp(1.3rem, 2.4vw, 2rem);
+      line-height: 1.35;
+      letter-spacing: -0.012em;
+      max-width: 32ch;
+    }
+    .now-body em { color: var(--accent); font-style: italic; }
+    .now-meta {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      max-width: 600px;
+    }
+    .now-meta dt {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 0.4rem;
+    }
+    .now-meta dd { font-size: 0.95rem; color: var(--ink); }
+
+    /* ------------------------------------------------------------------ */
+    /*  EXPERIENCE                                                        */
+    /* ------------------------------------------------------------------ */
+    .xp-list { display: flex; flex-direction: column; }
+    .xp-item {
+      padding-block: 2.5rem;
+      border-top: 1px solid var(--rule);
+      position: relative;
+      cursor: default;
+    }
+    .xp-item:first-child { border-top: 0; padding-top: 0; }
+    .xp-item:last-child { padding-bottom: 0; }
+
+    .xp-head {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 720px) {
+      .xp-head {
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        gap: 2rem;
+      }
+    }
+    .xp-company {
+      font-family: var(--display);
+      font-weight: 350;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      transition: color 0.3s ease;
+    }
+    .xp-item:hover .xp-company { color: var(--accent); }
+    .xp-when {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      white-space: nowrap;
+    }
+    .xp-role {
+      font-family: var(--body);
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+    .xp-role .sep { color: var(--ink-faint); margin-inline: 0.6rem; }
+
+    .xp-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-width: 70ch;
+    }
+    .xp-bullets li {
+      position: relative;
+      padding-left: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--ink-mid);
+    }
+    .xp-bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 0.5rem;
+      height: 1px;
+      background: var(--ink-faint);
+    }
+    .xp-bullets li strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .xp-bullets li .metric {
+      color: var(--accent);
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.92em;
+    }
+
+    .xp-stack {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .stack-tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      padding: 0.32rem 0.6rem;
+      color: var(--ink-dim);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+    .xp-item:hover .stack-tag {
+      color: var(--ink-mid);
+      border-color: var(--ink-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  IMPACT (BIG NUMBERS)                                              */
+    /* ------------------------------------------------------------------ */
+    .impact {
+      background: linear-gradient(180deg, transparent, var(--bg-soft) 30%, var(--bg-soft) 70%, transparent);
+    }
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      margin-top: 1.5rem;
+    }
+    @media (min-width: 760px) { .impact-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .stat {
+      background: var(--bg);
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      transition: background 0.3s ease;
+    }
+    .stat:hover { background: var(--bg-card); }
+    .stat-num {
+      font-family: var(--display);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+    }
+    .stat-num .unit {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 0.55em;
+      color: var(--accent);
+      margin-left: 0.1em;
+      letter-spacing: 0;
+    }
+    .stat-label {
+      margin-top: 0.85rem;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: var(--ink-mid);
+      max-width: 28ch;
+    }
+    .stat-where {
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  SKILLS                                                            */
+    /* ------------------------------------------------------------------ */
+    .skill-cats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+    @media (min-width: 700px) { .skill-cats { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 3rem; } }
+
+    .skill-cat h3 {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 400;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .skill-cat p {
+      font-size: 0.92rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+    .skill-cat .hl { color: var(--ink); font-weight: 500; }
+
+    /* ------------------------------------------------------------------ */
+    /*  AWARDS                                                            */
+    /* ------------------------------------------------------------------ */
+    .awards-list { display: flex; flex-direction: column; }
+    .award {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 1.5rem;
+      align-items: baseline;
+      padding-block: 1.1rem;
+      border-top: 1px solid var(--rule);
+      transition: padding 0.25s ease;
+    }
+    .award:first-child { border-top: 0; }
+    .award:hover { padding-left: 0.5rem; }
+    .award-rank {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.6rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .award-body { color: var(--ink); font-size: 0.95rem; line-height: 1.5; }
+    .award-body .name { font-weight: 600; }
+    .award-body .meta {
+      display: block;
+      margin-top: 0.25rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  CONTACT                                                           */
+    /* ------------------------------------------------------------------ */
+    .contact {
+      padding-block: clamp(5rem, 12vh, 9rem);
+      border-top: 1px solid var(--rule);
+    }
+    .contact h2 {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: clamp(2.6rem, 7vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .contact h2 .ital {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 300;
+    }
+    .contact p {
+      max-width: 50ch;
+      color: var(--ink-mid);
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+
+    .contact-rows { display: flex; flex-direction: column; }
+    .contact-row {
+      display: grid;
+      grid-template-columns: 110px 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      padding-block: 1.4rem;
+      border-top: 1px solid var(--rule);
+      transition: background 0.25s ease;
+    }
+    .contact-row:last-child { border-bottom: 1px solid var(--rule); }
+    .contact-row:hover { background: var(--bg-soft); }
+    .contact-row:hover .contact-arrow { color: var(--accent); transform: translateX(6px); }
+
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .contact-value {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .contact-arrow {
+      font-family: var(--mono);
+      color: var(--ink-faint);
+      transition: all 0.25s ease;
+      font-size: 1.1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  FOOTER                                                            */
+    /* ------------------------------------------------------------------ */
+    footer {
+      padding-block: 2.5rem;
+      border-top: 1px solid var(--rule);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.1em;
+    }
+    .foot-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  REVEAL ANIMATION                                                  */
+    /* ------------------------------------------------------------------ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.9s cubic-bezier(0.2, 0.65, 0.3, 1), transform 0.9s cubic-bezier(0.2, 0.65, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================== -->
+  <!--  NAV                                                            -->
+  <!-- ============================================================== -->
+  <nav class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="nav-mark"><span class="dot"></span>F.JAADARI / 2026</a>
+      <div class="nav-links">
+        <a href="#now"><span class="num">01</span>NOW</a>
+        <a href="#experience"><span class="num">02</span>WORK</a>
+        <a href="#impact"><span class="num">03</span>IMPACT</a>
+        <a href="#skills"><span class="num">04</span>STACK</a>
+        <a href="#contact"><span class="num">05</span>CONTACT</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!--  HERO                                                           -->
+  <!-- ============================================================== -->
+  <header class="hero wrap" id="top">
+    <div class="hero-meta">
+      <span>Senior AI / ML Engineer</span>
+      <span>Nantes — Paris, FR</span>
+      <span>Available for senior roles</span>
+    </div>
+
+    <h1 class="hero-title">
+      Building production <span class="ital">LLM systems,</span> end-to-end.
+    </h1>
+
+    <p class="hero-sub">
+      Five years shipping and operating LLM platforms across <strong>Crédit Agricole</strong>, <strong>Carrefour</strong>, and <strong>Elyadata</strong>. RAG pipelines, agent orchestration, fine-tuning, inference serving — from the prototype on the whiteboard to the SLO on the dashboard.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#experience" class="btn primary">See the work</a>
+      <a href="#contact" class="btn">Get in touch</a>
+    </div>
+
+    <div class="hero-floor">
+      <span>04 / 2026</span>
+      <span class="scroll-hint">scroll</span>
+      <span>v.01</span>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!--  NOW                                                            -->
+  <!-- ============================================================== -->
+  <section id="now" class="section wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">01</span>NOW</div>
+      <div>
+        <p class="now-body reveal">
+          Currently designing the <em>Group-wide LLM Socle Platform</em> at Crédit Agricole — the foundational GenAI infrastructure powering every internal AI initiative across the bank's entities.
+        </p>
+        <dl class="now-meta reveal">
+          <div>
+            <dt>Role</dt>
+            <dd>Generative AI Engineer</dd>
+          </div>
+          <div>
+            <dt>Org</dt>
+            <dd>Crédit Agricole Technologies &amp; Services</dd>
+          </div>
+          <div>
+            <dt>Based</dt>
+            <dd>Nantes, France</dd>
+          </div>
+          <div>
+            <dt>Since</dt>
+            <dd>January 2025</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  EXPERIENCE                                                     -->
+  <!-- ============================================================== -->
+  <section id="experience" class="section wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">02</span>WORK</div>
+      <div class="xp-list">
+
+        <!-- CREDIT AGRICOLE -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">Crédit Agricole</h2>
+            <span class="xp-when">Jan 2025 — Now</span>
+          </div>
+          <p class="xp-role">Generative AI Engineer<span class="sep">·</span>Group-wide LLM Socle Platform<span class="sep">·</span>Nantes</p>
+          <ul class="xp-bullets">
+            <li>Architected the platform's three layers (<strong>exposure, orchestration, contextualization</strong>) applying clean-architecture principles to decouple inference, reasoning, retrieval, and governance.</li>
+            <li>Shipped the production <strong>inference gateway</strong> (FastAPI on EC2) — OpenAI-compatible API exposing sync, streaming, and batch endpoints for inference, embeddings, reranking, and guardrails. Now the backbone for every internal GenAI app.</li>
+            <li>Built <strong>GenLib</strong>, a Python SDK / Lambda Layer using Protocols (PEP 544) and Strategy/Factory patterns — application teams plug in providers and tools without forking the core.</li>
+            <li>Designed the <strong>agent orchestrator</strong> on LangChain / LangGraph with tool calling, MCP support, two-tier memory (DynamoDB + summarization), and token-aware <strong>context compaction</strong>.</li>
+            <li>Built a <strong>contextualized chunking</strong> framework (semantic, hierarchical, BM25, hybrid) — cut RAG retrieval errors by <span class="metric">62%</span>. Supports Naive, Fusion, Graph, and Agentic RAG out of the box.</li>
+            <li>Stood up the observability stack (CloudWatch + Grafana + Prometheus + OpenTelemetry) and release-gating eval pipelines on <strong>DeepEval</strong> and <strong>RAGAS</strong> — faithfulness, context precision, hallucination tracked across model versions.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">AWS Bedrock</span>
+            <span class="stack-tag">SageMaker</span>
+            <span class="stack-tag">Lambda</span>
+            <span class="stack-tag">DynamoDB</span>
+            <span class="stack-tag">LangChain</span>
+            <span class="stack-tag">LangGraph</span>
+            <span class="stack-tag">FastAPI</span>
+            <span class="stack-tag">Terraform</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">DeepEval</span>
+            <span class="stack-tag">RAGAS</span>
+            <span class="stack-tag">MLflow</span>
+            <span class="stack-tag">Grafana</span>
+          </div>
+        </article>
+
+        <!-- CARREFOUR -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">Carrefour</h2>
+            <span class="xp-when">May 2024 — Jan 2025</span>
+          </div>
+          <p class="xp-role">Generative AI Engineer<span class="sep">·</span>Elpy — autonomous support-ticket resolution<span class="sep">·</span>Paris</p>
+          <ul class="xp-bullets">
+            <li>Built Elpy, a conversational LLM agent combining intent classification, tool calling, and retrieval — drove <span class="metric">60% ticket deflection</span> (18K → 7.2K tickets/month).</li>
+            <li>Fine-tuned <strong>GPT-3.5-turbo</strong> on 12K curated conversations: <span class="metric">75% inference cost cut</span> vs. GPT-4 with <span class="metric">94% F1</span> across 47 intent classes.</li>
+            <li>Generated synthetic training data with GPT-4 to <strong>4×</strong> the dataset — improved edge-case coverage by <span class="metric">340%</span>.</li>
+            <li>Pioneered <strong>RAG Fusion</strong> (parallel retrieval over query reformulations + reciprocal rank fusion) — <span class="metric">+31% NDCG@5</span>.</li>
+            <li>Deployed semantic caching (Redis + sentence-transformers) reaching <span class="metric">68% cache hit rate</span> and saving <span class="metric">$8K / month</span> in API costs.</li>
+            <li>Led A/B tests across 50K requests comparing GPT-4, fine-tuned models, and RAG variants on CSAT and resolution rate.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Azure OpenAI</span>
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">LangChain</span>
+            <span class="stack-tag">Redis</span>
+            <span class="stack-tag">FastAPI</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">Fine-tuning</span>
+            <span class="stack-tag">A/B Testing</span>
+          </div>
+        </article>
+
+        <!-- ELYADATA -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">Elyadata</h2>
+            <span class="xp-when">Dec 2023 — Jan 2025</span>
+          </div>
+          <p class="xp-role">Data Scientist<span class="sep">·</span>NL-to-SQL platform &amp; LLM inference<span class="sep">·</span>Tunis</p>
+          <ul class="xp-bullets">
+            <li>Engineered the inference microservice on <strong>vLLM + PagedAttention</strong> — <span class="metric">5× throughput</span> over the baseline.</li>
+            <li>Benchmarked 15 open-source LLMs (Llama-2, Mistral, Falcon) on custom SQL generation; selected Mistral-7B with <span class="metric">87% accuracy</span> at <span class="metric">120ms P95</span>.</li>
+            <li>Extended Arabic support: benchmarked AraBART and Jais-13B, fine-tuned <strong>AceGPT-7B</strong> on code-switched data — <span class="metric">91% accuracy</span>.</li>
+            <li>Built a <strong>Graph RAG</strong> pipeline: hybrid entity extraction (NER <span class="metric">93% F1</span> + LLM relation extraction) → Neo4j (<strong>2M nodes, 5M edges</strong>) → Cypher generation at <span class="metric">78% execution success</span>.</li>
+            <li>Implemented sparse embeddings (<strong>SPLADE</strong>) + hybrid retrieval (dense + BM25 + learned fusion) — <span class="metric">+15% recall</span>.</li>
+            <li>Prototyped Self-RAG, CRAG (Corrective RAG), and HyDE in the internal research group; filed feature requests on <strong>vLLM</strong> and <strong>SGLang</strong>.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">vLLM</span>
+            <span class="stack-tag">PyTorch</span>
+            <span class="stack-tag">HuggingFace</span>
+            <span class="stack-tag">Neo4j</span>
+            <span class="stack-tag">FastAPI</span>
+            <span class="stack-tag">LangChain</span>
+            <span class="stack-tag">Kubernetes</span>
+            <span class="stack-tag">SPLADE</span>
+          </div>
+        </article>
+
+        <!-- DIGEHEALTH -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">DigeHealth</h2>
+            <span class="xp-when">Feb — Jul 2024</span>
+          </div>
+          <p class="xp-role">Data Scientist (Freelance)<span class="sep">·</span>AI for non-invasive GI diagnostics<span class="sep">·</span>Remote</p>
+          <ul class="xp-bullets">
+            <li>End-to-end audio ML pipeline for bowel-sound analysis: denoising, bandpass filtering, segmentation, and 1D-to-2D spectrogram transformation (Mel, log-Mel).</li>
+            <li>Object detection (<strong>YOLOv5/v8, Faster R-CNN</strong>) to localize abnormal time-frequency regions; <strong>ResNet/EfficientNet</strong> classifiers for normal vs. pathological patterns.</li>
+            <li>MLflow lifecycle tracking, GPU inference optimization, and clinical validation with medical experts.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">PyTorch</span>
+            <span class="stack-tag">YOLO</span>
+            <span class="stack-tag">MLflow</span>
+            <span class="stack-tag">Signal Processing</span>
+            <span class="stack-tag">Streamlit</span>
+          </div>
+        </article>
+
+        <!-- INFOR -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">Infor</h2>
+            <span class="xp-when">Feb — Aug 2023</span>
+          </div>
+          <p class="xp-role">Machine Learning Intern<span class="sep">·</span>DB-degradation prediction for the M3 ERP<span class="sep">·</span>Tunis</p>
+          <ul class="xp-bullets">
+            <li>Time-series models predicting real database-degradation incidents in multi-tenant SaaS before tenant impact; deployed on <strong>Amazon SageMaker</strong> with real-time endpoints, monitoring, and explainability via SHAP/LIME for the SRE team.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">SageMaker</span>
+            <span class="stack-tag">XGBoost</span>
+            <span class="stack-tag">SHAP</span>
+          </div>
+        </article>
+
+        <!-- OMDENA -->
+        <article class="xp-item reveal">
+          <div class="xp-head">
+            <h2 class="xp-company">Omdena</h2>
+            <span class="xp-when">Sep 2021 — Nov 2022</span>
+          </div>
+          <p class="xp-role">Machine Learning Engineer<span class="sep">·</span>AI-assisted humanitarian mapping<span class="sep">·</span>Remote</p>
+          <ul class="xp-bullets">
+            <li>Trained <strong>U-Net</strong> and <strong>DeepLabV3+</strong> for building footprint segmentation with transfer learning from RAMP; co-developed <strong>HOTLib</strong>, an open-source library for geospatial preprocessing and inference.</li>
+          </ul>
+          <div class="xp-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">PyTorch</span>
+            <span class="stack-tag">Image Segmentation</span>
+            <span class="stack-tag">Open Source</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  IMPACT                                                         -->
+  <!-- ============================================================== -->
+  <section id="impact" class="section impact wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">03</span>IMPACT</div>
+      <div>
+        <p class="now-body reveal" style="max-width: 38ch; margin-bottom: 2.5rem;">
+          A handful of <em>numbers I'm proud of</em> — measured in production, not in slide decks.
+        </p>
+        <div class="impact-grid">
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="60" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">Support tickets deflected by the Elpy LLM agent.</div>
+            <div class="stat-where">Carrefour</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="5" data-suffix="×">0<span class="unit">×</span></div>
+            <div class="stat-label">Inference throughput gain via vLLM + PagedAttention.</div>
+            <div class="stat-where">Elyadata</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="62" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">Reduction in RAG retrieval error from contextual chunking.</div>
+            <div class="stat-where">Crédit Agricole</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="8" data-prefix="$" data-suffix="K">0<span class="unit">K</span></div>
+            <div class="stat-label">Monthly API spend saved by semantic caching.</div>
+            <div class="stat-where">Carrefour</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="75" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">Inference cost cut from fine-tuned GPT-3.5 vs. GPT-4.</div>
+            <div class="stat-where">Carrefour</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="94" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">F1-score across 47 intent classes after fine-tuning.</div>
+            <div class="stat-where">Carrefour</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="68" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">Cache hit rate on Redis semantic cache (sentence-transformers).</div>
+            <div class="stat-where">Carrefour</div>
+          </div>
+
+          <div class="stat reveal">
+            <div class="stat-num" data-target="91" data-suffix="%">0<span class="unit">%</span></div>
+            <div class="stat-label">Arabic accuracy from fine-tuned AceGPT-7B on code-switched data.</div>
+            <div class="stat-where">Elyadata</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  SKILLS                                                         -->
+  <!-- ============================================================== -->
+  <section id="skills" class="section wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">04</span>STACK</div>
+      <div class="skill-cats">
+
+        <div class="skill-cat reveal">
+          <h3>LLM &amp; Agents</h3>
+          <p><span class="hl">LangChain</span>, <span class="hl">LangGraph</span>, LlamaIndex, Tool Calling, MCP, Guardrails, prompt &amp; context engineering, conversational memory.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Retrieval &amp; RAG</h3>
+          <p>Hybrid retrieval (dense + sparse + BM25), <span class="hl">SPLADE</span>, Cohere reranking, contextual chunking, <span class="hl">Graph RAG</span> on Neo4j, vector DBs, embeddings.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Training &amp; Fine-tuning</h3>
+          <p><span class="hl">PyTorch</span>, HuggingFace Transformers, PEFT (LoRA / Adapters), supervised fine-tuning, NER, JSONL pipelines, synthetic data generation.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Inference &amp; Serving</h3>
+          <p><span class="hl">vLLM</span> (PagedAttention, continuous batching), SGLang, Triton, HF Inference, AWS Bedrock, Azure OpenAI, quantization, KV-cache optimization, autoscaling.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Eval &amp; Observability</h3>
+          <p><span class="hl">DeepEval</span>, RAGAS, MLflow, hallucination / faithfulness / drift KPIs, A/B testing, Grafana, Prometheus, OpenTelemetry, CloudWatch.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Cloud &amp; Infrastructure</h3>
+          <p><span class="hl">AWS</span> (Bedrock, Lambda, SageMaker, EC2, DynamoDB, S3, Secrets Manager), Terraform, Docker, Kubernetes, Helm, GitLab/GitHub CI/CD.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Software Engineering</h3>
+          <p><span class="hl">Python</span>, FastAPI, Pydantic, Pytest, design patterns (Strategy, Factory, Visitor, Composite), clean architecture, Ruff, MyPy, C++.</p>
+        </div>
+
+        <div class="skill-cat reveal">
+          <h3>Leadership</h3>
+          <p>Code review, pair programming, technical mentoring, stakeholder communication across product / infra / business, Agile/Scrum.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  AWARDS                                                         -->
+  <!-- ============================================================== -->
+  <section id="awards" class="section wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">05</span>RECOGNITION</div>
+      <div>
+        <ul class="awards-list">
+          <li class="award reveal">
+            <span class="award-rank">1<sup>st</sup></span>
+            <div class="award-body">
+              <span class="name">AGEOS Challenge</span> — olive parcel classification &amp; mapping from Sentinel-2 multispectral time series.
+              <span class="meta">180+ participants</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">1<sup>st</sup></span>
+            <div class="award-body">
+              <span class="name">UmojaHack 2023</span> — Cryptojacking Detection Challenge.
+              <span class="meta">437 participants</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">1<sup>st</sup></span>
+            <div class="award-body">
+              <span class="name">AI Night Challenge 2023</span> — “Respirer Mieux” ML competition by Mobelite.
+              <span class="meta">Tunis</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">1<sup>st</sup></span>
+            <div class="award-body">
+              <span class="name">DataQuest Hackathon</span>.
+              <span class="meta">80+ participants</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">3<sup>rd</sup></span>
+            <div class="award-body">
+              <span class="name">Data Drive 2030</span> — global ML competition predicting early-learning outcomes.
+              <span class="meta">966 participants</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">3<sup>rd</sup></span>
+            <div class="award-body">
+              <span class="name">ActInSpace International Finals</span> — space-tech innovation challenge.
+              <span class="meta">International</span>
+            </div>
+          </li>
+          <li class="award reveal">
+            <span class="award-rank">9<sup>th</sup></span>
+            <div class="award-body">
+              <span class="name">UmojaHack 2023 — CO₂ Prediction</span> — 2nd nationally.
+              <span class="meta">763 participants · Africa-wide</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  CONTACT                                                        -->
+  <!-- ============================================================== -->
+  <section id="contact" class="contact wrap">
+    <div class="section-grid">
+      <div class="section-label reveal"><span class="num">06</span>CONTACT</div>
+      <div>
+        <h2 class="reveal">Let's <span class="ital">build</span> something.</h2>
+        <p class="reveal">
+          Open to senior LLM / Generative AI roles in Paris, Nantes, or remote. Always happy to talk shop about RAG quality, agent design, inference economics, or anything LLM-systems-flavored.
+        </p>
+
+        <div class="contact-rows">
+          <a href="mailto:jaadari.firas99@gmail.com" class="contact-row reveal">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">jaadari.firas99@gmail.com</span>
+            <span class="contact-arrow">→</span>
+          </a>
+          <a href="https://www.linkedin.com/in/jaadarix/" target="_blank" rel="noopener" class="contact-row reveal">
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-value">/in/jaadarix</span>
+            <span class="contact-arrow">→</span>
+          </a>
+          <a href="https://github.com/JAADARI" target="_blank" rel="noopener" class="contact-row reveal">
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">/JAADARI</span>
+            <span class="contact-arrow">→</span>
+          </a>
+          <a href="tel:+33646524109" class="contact-row reveal">
+            <span class="contact-label">Phone</span>
+            <span class="contact-value">+33 6 46 52 41 09</span>
+            <span class="contact-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  FOOTER                                                         -->
+  <!-- ============================================================== -->
+  <footer class="wrap">
+    <div class="foot-inner">
+      <span>© 2026 — F. Jaadari</span>
+      <span>Hand-crafted in HTML/CSS · No frameworks harmed</span>
+      <a href="#top">↑ TO TOP</a>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!--  SCRIPTS                                                        -->
+  <!-- ============================================================== -->
+  <script>
+    // ---------- nav: shadow on scroll ----------
+    const nav = document.getElementById('nav');
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ---------- reveal on scroll ----------
+    const revealEls = document.querySelectorAll('.reveal');
+    const ro = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          ro.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach((el) => ro.observe(el));
+
+    // ---------- count-up for impact stats ----------
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    const countUp = (el) => {
+      const target = parseFloat(el.dataset.target);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const v = target * easeOutCubic(t);
+        const display = target >= 10 ? Math.floor(v) : v.toFixed(1).replace(/\.0$/, '');
+        el.innerHTML = `${prefix}${display}<span class="unit">${suffix}</span>`;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          countUp(e.target);
+          statObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.stat-num').forEach((el) => statObs.observe(el));
+  </script>
+</body>
+</html>
