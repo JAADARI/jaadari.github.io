@@ -1,677 +1,721 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Firas Jaadari — Senior AI / ML Engineer</title>
-  <meta name="description" content="Senior AI/ML Engineer building production LLM systems — RAG, agents, fine-tuning, and inference optimization. Currently at Crédit Agricole." />
-  <meta name="author" content="Firas Jaadari" />
+  <meta name="description" content="Senior AI/ML Engineer building production LLM systems — RAG, agents, fine-tuning, inference optimization. Currently at Crédit Agricole." />
 
   <!-- OpenGraph -->
   <meta property="og:title" content="Firas Jaadari — Senior AI / ML Engineer" />
   <meta property="og:description" content="Building production LLM systems — RAG, agents, fine-tuning, inference optimization." />
   <meta property="og:type" content="website" />
 
+  <!-- Theme: apply before paint to avoid flash -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = saved || sys;
+      } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@200..800&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@300..600&display=swap" rel="stylesheet" />
 
   <style>
-    /* ------------------------------------------------------------------ */
-    /*  TOKENS                                                            */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       TOKENS / THEMES
+       ================================================================= */
     :root {
-      --bg: #0a0a0b;
-      --bg-soft: #131316;
-      --bg-card: #15151a;
-      --ink: #ebe9e3;
-      --ink-mid: #a8a59c;
-      --ink-dim: #6b6863;
-      --ink-faint: #3a3833;
-      --rule: #1f1f24;
-      --accent: #ff5b1e;
-      --accent-soft: rgba(255, 91, 30, 0.12);
-
-      --display: "Fraunces", "Times New Roman", serif;
-      --body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
-
-      --maxw: 1280px;
-      --gutter: clamp(1.25rem, 4vw, 4rem);
+      --bg: #fafafa;
+      --surface-1: #ffffff;
+      --surface-2: #f4f4f5;
+      --ink: #09090b;
+      --ink-2: #3f3f46;
+      --ink-3: #71717a;
+      --ink-4: #a1a1aa;
+      --rule: #e4e4e7;
+      --rule-strong: #d4d4d8;
+      --accent: #0046ff;
+      --accent-soft: rgba(0, 70, 255, 0.08);
+      --accent-fg: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04);
+      --grid-line: rgba(0,0,0,0.04);
+    }
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --surface-1: #111114;
+      --surface-2: #18181c;
+      --ink: #fafafa;
+      --ink-2: #d4d4d8;
+      --ink-3: #a1a1aa;
+      --ink-4: #71717a;
+      --rule: #27272a;
+      --rule-strong: #3f3f46;
+      --accent: #5b8cff;
+      --accent-soft: rgba(91, 140, 255, 0.12);
+      --accent-fg: #09090b;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
+      --grid-line: rgba(255,255,255,0.04);
     }
 
-    /* ------------------------------------------------------------------ */
-    /*  RESET / BASE                                                      */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       BASE
+       ================================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: var(--body);
-      font-size: 16px;
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
       line-height: 1.55;
-      font-weight: 400;
-      overflow-x: hidden;
       letter-spacing: -0.005em;
+      transition: background 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
     }
-    /* Subtle film grain overlay */
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    img { max-width: 100%; display: block; }
+    code, .mono { font-family: 'Geist Mono', 'SF Mono', Menlo, monospace; font-feature-settings: "ss01", "ss02"; }
+    ::selection { background: var(--accent); color: var(--accent-fg); }
+
+    /* Subtle background grid */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 100;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-      mix-blend-mode: overlay;
+      z-index: -1;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
     }
-    a { color: inherit; text-decoration: none; }
-    ul, ol { list-style: none; }
-    img { max-width: 100%; display: block; }
 
-    ::selection { background: var(--accent); color: var(--bg); }
-
-    /* ------------------------------------------------------------------ */
-    /*  LAYOUT PRIMITIVES                                                 */
-    /* ------------------------------------------------------------------ */
     .wrap {
-      max-width: var(--maxw);
+      max-width: 1180px;
       margin: 0 auto;
-      padding-left: var(--gutter);
-      padding-right: var(--gutter);
+      padding-left: clamp(1.25rem, 4vw, 2.5rem);
+      padding-right: clamp(1.25rem, 4vw, 2.5rem);
     }
 
-    /* Editorial section: label in left margin, content offset */
-    .section {
-      padding-block: clamp(4rem, 10vh, 8rem);
-      border-top: 1px solid var(--rule);
-      position: relative;
-    }
-    .section-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
-    @media (min-width: 900px) {
-      .section-grid {
-        grid-template-columns: 200px 1fr;
-        gap: 4rem;
-      }
-    }
-    .section-label {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--ink-dim);
-      padding-top: 0.5rem;
-    }
-    .section-label .num {
-      color: var(--accent);
-      margin-right: 0.5em;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /*  NAV                                                               */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       NAV
+       ================================================================= */
     .nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 50;
-      backdrop-filter: blur(14px) saturate(140%);
-      -webkit-backdrop-filter: blur(14px) saturate(140%);
-      background: rgba(10, 10, 11, 0.65);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
       border-bottom: 1px solid transparent;
-      transition: border-color 0.3s ease, background 0.3s ease;
+      transition: border-color 0.25s ease;
     }
     .nav.scrolled { border-bottom-color: var(--rule); }
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-block: 1rem;
+      height: 56px;
     }
     .nav-mark {
-      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Geist Mono', monospace;
       font-size: 0.78rem;
-      letter-spacing: 0.06em;
-      color: var(--ink-mid);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink);
     }
-    .nav-mark .dot {
+    .nav-mark .pulse {
       display: inline-block;
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: var(--accent);
-      margin-right: 0.6rem;
-      box-shadow: 0 0 0 0 var(--accent);
+      background: #10b981;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
       animation: pulse 2.4s ease-out infinite;
-      vertical-align: middle;
     }
     @keyframes pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(255, 91, 30, 0.5); }
-      70%  { box-shadow: 0 0 0 9px rgba(255, 91, 30, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 91, 30, 0); }
+      0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+      70%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
+    .nav-right { display: flex; align-items: center; gap: 0.4rem; }
     .nav-links {
       display: none;
-      gap: 1.75rem;
+      gap: 0.4rem;
+      margin-right: 0.4rem;
     }
     @media (min-width: 760px) { .nav-links { display: flex; } }
     .nav-links a {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      transition: color 0.2s ease;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.83rem;
+      color: var(--ink-3);
+      border-radius: 6px;
+      transition: color 0.15s ease, background 0.15s ease;
     }
-    .nav-links a:hover { color: var(--ink); }
-    .nav-links a .num { color: var(--accent); margin-right: 0.4em; }
+    .nav-links a:hover { color: var(--ink); background: var(--surface-2); }
 
-    /* ------------------------------------------------------------------ */
-    /*  HERO                                                              */
-    /* ------------------------------------------------------------------ */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    .icon-btn {
+      width: 36px; height: 36px;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      padding-top: 7rem;
-      padding-bottom: 5rem;
+      border: 1px solid var(--rule);
+      background: var(--surface-1);
+      border-radius: 8px;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .icon-btn:hover { color: var(--ink); border-color: var(--rule-strong); }
+    .icon-btn svg { width: 16px; height: 16px; }
+    /* Hide the inactive icon */
+    [data-theme="light"] .icon-btn .icon-moon { display: none; }
+    [data-theme="dark"]  .icon-btn .icon-sun  { display: none; }
+
+    /* =================================================================
+       HERO
+       ================================================================= */
+    .hero {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
       position: relative;
     }
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--ink-dim);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.1s ease-out forwards;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
     }
-    .hero-meta span { position: relative; }
-    .hero-meta span + span::before {
-      content: "";
-      position: absolute;
-      left: -0.75rem;
-      top: 50%;
-      width: 3px; height: 3px;
+    @media (min-width: 880px) {
+      .hero-grid { grid-template-columns: 1fr 280px; gap: 4rem; }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--ink-faint);
-      transform: translateY(-50%);
+      background: var(--accent);
     }
 
     .hero-title {
-      font-family: var(--display);
-      font-weight: 350;
-      font-size: clamp(2.6rem, 8vw, 6.5rem);
-      line-height: 0.98;
-      letter-spacing: -0.025em;
-      max-width: 14ch;
-      font-variation-settings: "opsz" 144, "SOFT" 50;
-      opacity: 0;
-      animation: fadeUp 1s 0.25s ease-out forwards;
+      font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      font-weight: 600;
+      max-width: 16ch;
     }
-    .hero-title .ital {
-      font-style: italic;
-      color: var(--accent);
-      font-weight: 300;
-      font-variation-settings: "opsz" 144, "SOFT" 100;
-    }
-
+    .hero-title .accent { color: var(--accent); }
     .hero-sub {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      line-height: 1.6;
+      color: var(--ink-3);
       max-width: 56ch;
-      font-size: clamp(1rem, 1.4vw, 1.18rem);
-      line-height: 1.55;
-      color: var(--ink-mid);
-      opacity: 0;
-      animation: fadeUp 1s 0.45s ease-out forwards;
     }
-    .hero-sub strong { color: var(--ink); font-weight: 600; }
-
-    .hero-cta {
-      margin-top: 3rem;
+    .hero-sub strong { color: var(--ink); font-weight: 500; }
+    .hero-meta {
+      margin-top: 1.5rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1.25rem;
-      align-items: center;
-      opacity: 0;
-      animation: fadeUp 1s 0.65s ease-out forwards;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+    }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .hero-meta svg { width: 13px; height: 13px; opacity: 0.75; }
+
+    .hero-cta {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
     }
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 1.5rem;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border: 1px solid var(--ink-faint);
+      gap: 0.5rem;
+      padding: 0.65rem 1.1rem;
+      font-size: 0.87rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid var(--rule-strong);
+      background: var(--surface-1);
       color: var(--ink);
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
+      transition: all 0.15s ease;
     }
-    .btn::after {
-      content: "→";
-      transition: transform 0.25s ease;
-    }
-    .btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .btn:hover::after { transform: translateX(4px); }
+    .btn:hover { border-color: var(--ink); transform: translateY(-1px); }
     .btn.primary {
       background: var(--accent);
-      color: var(--bg);
+      color: var(--accent-fg);
       border-color: var(--accent);
     }
-    .btn.primary:hover {
-      background: transparent;
-      color: var(--accent);
-    }
+    .btn.primary:hover { filter: brightness(1.1); }
+    .btn svg { width: 14px; height: 14px; }
 
-    .hero-floor {
-      position: absolute;
-      left: var(--gutter);
-      right: var(--gutter);
-      bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--ink-dim);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fadeUp 1s 0.85s ease-out forwards;
+    /* PHOTO */
+    .photo-wrap {
+      justify-self: center;
+      width: 220px; height: 220px;
+      position: relative;
     }
-    .scroll-hint {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+    @media (min-width: 880px) {
+      .photo-wrap { width: 240px; height: 240px; justify-self: end; }
+    }
+    .photo-frame {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, var(--ink)));
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-    }
-    .scroll-hint::before {
-      content: "";
-      width: 1px;
-      height: 36px;
-      background: var(--ink-dim);
-      animation: scrollLine 2.4s ease-in-out infinite;
-    }
-    @keyframes scrollLine {
-      0%, 100% { transform: scaleY(0.3); transform-origin: top; }
-      50%      { transform: scaleY(1); transform-origin: top; }
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /*  ABOUT (NOW)                                                       */
-    /* ------------------------------------------------------------------ */
-    .now-body {
-      font-family: var(--display);
-      font-weight: 300;
-      font-size: clamp(1.3rem, 2.4vw, 2rem);
-      line-height: 1.35;
-      letter-spacing: -0.012em;
-      max-width: 32ch;
-    }
-    .now-body em { color: var(--accent); font-style: italic; }
-    .now-meta {
-      margin-top: 2.5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 2rem;
-      max-width: 600px;
-    }
-    .now-meta dt {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      margin-bottom: 0.4rem;
-    }
-    .now-meta dd { font-size: 0.95rem; color: var(--ink); }
-
-    /* ------------------------------------------------------------------ */
-    /*  EXPERIENCE                                                        */
-    /* ------------------------------------------------------------------ */
-    .xp-list { display: flex; flex-direction: column; }
-    .xp-item {
-      padding-block: 2.5rem;
-      border-top: 1px solid var(--rule);
+      justify-content: center;
+      color: var(--accent-fg);
+      font-size: 4.5rem;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      box-shadow: var(--shadow-md);
       position: relative;
-      cursor: default;
+      z-index: 1;
+      border: 4px solid var(--surface-1);
     }
-    .xp-item:first-child { border-top: 0; padding-top: 0; }
-    .xp-item:last-child { padding-bottom: 0; }
+    .photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    /* Decorative ring around photo */
+    .photo-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px dashed var(--rule-strong);
+      animation: spin 60s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* =================================================================
+       SECTION
+       ================================================================= */
+    .section {
+      padding-block: clamp(3.5rem, 7vh, 6rem);
+      border-top: 1px solid var(--rule);
+    }
+    .section-head {
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .section-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-4);
+      text-transform: uppercase;
+    }
+    .section-tag .slash { color: var(--accent); margin-right: 0.4em; }
+    .section-title {
+      margin-top: 0.5rem;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+
+    /* =================================================================
+       NOW
+       ================================================================= */
+    .now-card {
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 760px) {
+      .now-card { grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+    }
+    .now-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink-2);
+    }
+    .now-text strong { color: var(--ink); font-weight: 500; }
+    .now-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem 2.5rem;
+      min-width: 240px;
+    }
+    .now-stat dt {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-4);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .now-stat dd { font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+
+    /* =================================================================
+       EXPERIENCE
+       ================================================================= */
+    .xp-list { display: flex; flex-direction: column; gap: 1rem; }
+    .xp-item {
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: clamp(1.25rem, 2.5vw, 1.75rem);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .xp-item:hover { border-color: var(--rule-strong); }
 
     .xp-head {
       display: grid;
       grid-template-columns: 1fr;
       gap: 0.4rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
     }
     @media (min-width: 720px) {
-      .xp-head {
-        grid-template-columns: 1fr auto;
-        align-items: baseline;
-        gap: 2rem;
-      }
+      .xp-head { grid-template-columns: 1fr auto; align-items: baseline; gap: 1.5rem; }
     }
     .xp-company {
-      font-family: var(--display);
-      font-weight: 350;
-      font-size: clamp(1.7rem, 3vw, 2.4rem);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      transition: color 0.3s ease;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
     }
-    .xp-item:hover .xp-company { color: var(--accent); }
     .xp-when {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      white-space: nowrap;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      letter-spacing: 0.02em;
     }
     .xp-role {
-      font-family: var(--body);
-      font-size: 0.95rem;
-      color: var(--ink-mid);
-      margin-bottom: 1.25rem;
-      font-style: italic;
-    }
-    .xp-role .sep { color: var(--ink-faint); margin-inline: 0.6rem; }
-
-    .xp-bullets {
+      font-size: 0.88rem;
+      color: var(--ink-3);
+      margin-bottom: 1rem;
       display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      max-width: 70ch;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.8rem;
     }
+    .xp-role .sep { color: var(--ink-4); }
+
+    .xp-bullets { display: flex; flex-direction: column; gap: 0.6rem; }
     .xp-bullets li {
       position: relative;
-      padding-left: 1.5rem;
-      font-size: 0.95rem;
+      padding-left: 1.1rem;
+      font-size: 0.92rem;
       line-height: 1.55;
-      color: var(--ink-mid);
+      color: var(--ink-2);
     }
     .xp-bullets li::before {
-      content: "";
+      content: "▸";
       position: absolute;
       left: 0;
-      top: 0.7rem;
-      width: 0.5rem;
-      height: 1px;
-      background: var(--ink-faint);
+      top: 0;
+      color: var(--ink-4);
+      font-size: 0.8em;
     }
-    .xp-bullets li strong {
-      color: var(--ink);
-      font-weight: 600;
-    }
+    .xp-bullets li strong { color: var(--ink); font-weight: 600; }
     .xp-bullets li .metric {
       color: var(--accent);
-      font-family: var(--mono);
+      font-family: 'Geist Mono', monospace;
       font-weight: 500;
-      font-size: 0.92em;
+      font-size: 0.93em;
+      padding: 0.05em 0.3em;
+      background: var(--accent-soft);
+      border-radius: 4px;
     }
 
     .xp-stack {
-      margin-top: 1.5rem;
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
     .stack-tag {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.04em;
-      padding: 0.32rem 0.6rem;
-      color: var(--ink-dim);
-      border: 1px solid var(--rule);
-      border-radius: 2px;
-      transition: all 0.2s ease;
-    }
-    .xp-item:hover .stack-tag {
-      color: var(--ink-mid);
-      border-color: var(--ink-faint);
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.55rem;
+      color: var(--ink-3);
+      background: var(--surface-2);
+      border-radius: 4px;
     }
 
-    /* ------------------------------------------------------------------ */
-    /*  IMPACT (BIG NUMBERS)                                              */
-    /* ------------------------------------------------------------------ */
-    .impact {
-      background: linear-gradient(180deg, transparent, var(--bg-soft) 30%, var(--bg-soft) 70%, transparent);
-    }
+    /* =================================================================
+       IMPACT (numbers)
+       ================================================================= */
     .impact-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1px;
       background: var(--rule);
-      margin-top: 1.5rem;
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      overflow: hidden;
     }
     @media (min-width: 760px) { .impact-grid { grid-template-columns: repeat(4, 1fr); } }
 
     .stat {
-      background: var(--bg);
-      padding: clamp(1.5rem, 3vw, 2.25rem);
-      transition: background 0.3s ease;
+      background: var(--surface-1);
+      padding: clamp(1.25rem, 2.5vw, 1.75rem);
+      transition: background 0.2s ease;
     }
-    .stat:hover { background: var(--bg-card); }
+    .stat:hover { background: var(--surface-2); }
     .stat-num {
-      font-family: var(--display);
-      font-weight: 300;
-      font-style: italic;
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      line-height: 1;
+      font-family: 'Geist Mono', monospace;
+      font-weight: 500;
+      font-size: clamp(2rem, 4.5vw, 3rem);
       color: var(--accent);
-      letter-spacing: -0.03em;
-      font-variation-settings: "opsz" 144, "SOFT" 100;
+      line-height: 1;
+      letter-spacing: -0.04em;
     }
     .stat-num .unit {
-      font-style: normal;
-      font-weight: 400;
       font-size: 0.55em;
-      color: var(--accent);
-      margin-left: 0.1em;
-      letter-spacing: 0;
+      margin-left: 0.05em;
+      opacity: 0.85;
     }
     .stat-label {
       margin-top: 0.85rem;
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       line-height: 1.45;
-      color: var(--ink-mid);
-      max-width: 28ch;
+      color: var(--ink-2);
     }
     .stat-where {
-      margin-top: 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.66rem;
-      letter-spacing: 0.14em;
+      margin-top: 0.6rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--ink-dim);
+      color: var(--ink-4);
     }
 
-    /* ------------------------------------------------------------------ */
-    /*  SKILLS                                                            */
-    /* ------------------------------------------------------------------ */
-    .skill-cats {
+    /* =================================================================
+       SKILLS
+       ================================================================= */
+    .skill-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 2.25rem;
+      gap: 1rem;
     }
-    @media (min-width: 700px) { .skill-cats { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 3rem; } }
+    @media (min-width: 700px) { .skill-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1000px) { .skill-grid { grid-template-columns: repeat(4, 1fr); } }
 
-    .skill-cat h3 {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
+    .skill-card {
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: border-color 0.2s ease;
+    }
+    .skill-card:hover { border-color: var(--rule-strong); }
+    .skill-card h3 {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--accent);
-      font-weight: 400;
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--rule);
+      font-weight: 500;
+      margin-bottom: 0.85rem;
     }
-    .skill-cat p {
-      font-size: 0.92rem;
-      color: var(--ink-mid);
-      line-height: 1.65;
+    .skill-card p {
+      font-size: 0.87rem;
+      line-height: 1.55;
+      color: var(--ink-2);
     }
-    .skill-cat .hl { color: var(--ink); font-weight: 500; }
+    .skill-card .hl { color: var(--ink); font-weight: 600; }
 
-    /* ------------------------------------------------------------------ */
-    /*  AWARDS                                                            */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       WRITING
+       ================================================================= */
+    .writing-list { display: flex; flex-direction: column; gap: 1rem; }
+    .post-card {
+      display: block;
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .post-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .post-card .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      color: var(--ink-4);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .post-card .post-meta .dot { color: var(--ink-4); }
+    .post-card .post-tag {
+      padding: 0.2rem 0.55rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 4px;
+    }
+    .post-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+    }
+    .post-card p {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--ink-3);
+      max-width: 70ch;
+    }
+    .post-card .post-arrow {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      color: var(--ink-4);
+      transition: all 0.2s ease;
+    }
+    .post-card:hover .post-arrow {
+      color: var(--accent);
+      transform: translate(3px, -3px);
+    }
+
+    /* =================================================================
+       AWARDS
+       ================================================================= */
     .awards-list { display: flex; flex-direction: column; }
     .award {
       display: grid;
-      grid-template-columns: 70px 1fr;
-      gap: 1.5rem;
+      grid-template-columns: 50px 1fr;
+      gap: 1.25rem;
       align-items: baseline;
-      padding-block: 1.1rem;
+      padding-block: 0.95rem;
       border-top: 1px solid var(--rule);
-      transition: padding 0.25s ease;
     }
     .award:first-child { border-top: 0; }
-    .award:hover { padding-left: 0.5rem; }
     .award-rank {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 400;
-      font-size: 1.6rem;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
-    .award-body { color: var(--ink); font-size: 0.95rem; line-height: 1.5; }
-    .award-body .name { font-weight: 600; }
-    .award-body .meta {
-      display: block;
-      margin-top: 0.25rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--ink-dim);
-      letter-spacing: 0.06em;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /*  CONTACT                                                           */
-    /* ------------------------------------------------------------------ */
-    .contact {
-      padding-block: clamp(5rem, 12vh, 9rem);
-      border-top: 1px solid var(--rule);
-    }
-    .contact h2 {
-      font-family: var(--display);
-      font-weight: 300;
-      font-size: clamp(2.6rem, 7vw, 5.5rem);
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 2rem;
-    }
-    .contact h2 .ital {
-      font-style: italic;
-      color: var(--accent);
-      font-weight: 300;
-    }
-    .contact p {
-      max-width: 50ch;
-      color: var(--ink-mid);
-      font-size: 1.05rem;
-      margin-bottom: 3rem;
-    }
-
-    .contact-rows { display: flex; flex-direction: column; }
-    .contact-row {
-      display: grid;
-      grid-template-columns: 110px 1fr auto;
-      gap: 1.25rem;
-      align-items: center;
-      padding-block: 1.4rem;
-      border-top: 1px solid var(--rule);
-      transition: background 0.25s ease;
-    }
-    .contact-row:last-child { border-bottom: 1px solid var(--rule); }
-    .contact-row:hover { background: var(--bg-soft); }
-    .contact-row:hover .contact-arrow { color: var(--accent); transform: translateX(6px); }
-
-    .contact-label {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-    }
-    .contact-value {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
-      color: var(--ink);
-      letter-spacing: -0.01em;
-    }
-    .contact-arrow {
-      font-family: var(--mono);
-      color: var(--ink-faint);
-      transition: all 0.25s ease;
+      font-family: 'Geist Mono', monospace;
+      font-weight: 500;
       font-size: 1.1rem;
+      color: var(--accent);
+    }
+    .award-name { color: var(--ink); font-weight: 500; font-size: 0.95rem; }
+    .award-desc { color: var(--ink-3); font-size: 0.88rem; }
+    .award-meta {
+      display: block;
+      margin-top: 0.2rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--ink-4);
     }
 
-    /* ------------------------------------------------------------------ */
-    /*  FOOTER                                                            */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       CONTACT
+       ================================================================= */
+    .contact-card {
+      background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      padding: clamp(2rem, 5vw, 3.5rem);
+      text-align: center;
+    }
+    .contact-card h2 {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      line-height: 1.1;
+    }
+    .contact-card h2 .accent { color: var(--accent); }
+    .contact-card p {
+      max-width: 50ch;
+      margin: 0 auto 2rem;
+      color: var(--ink-3);
+      font-size: 1rem;
+    }
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    /* =================================================================
+       FOOTER
+       ================================================================= */
     footer {
-      padding-block: 2.5rem;
+      padding-block: 2rem;
       border-top: 1px solid var(--rule);
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--ink-dim);
-      letter-spacing: 0.1em;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--ink-4);
     }
     .foot-inner {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
     }
+    footer a { color: var(--ink-3); }
+    footer a:hover { color: var(--accent); }
 
-    /* ------------------------------------------------------------------ */
-    /*  REVEAL ANIMATION                                                  */
-    /* ------------------------------------------------------------------ */
+    /* =================================================================
+       REVEAL
+       ================================================================= */
     .reveal {
       opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.9s cubic-bezier(0.2, 0.65, 0.3, 1), transform 0.9s cubic-bezier(0.2, 0.65, 0.3, 1);
+      transform: translateY(12px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.65, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.65, 0.3, 1);
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .photo-wrap::before { animation: none; }
     }
-
   </style>
 </head>
 <body>
@@ -681,13 +725,26 @@
   <!-- ============================================================== -->
   <nav class="nav" id="nav">
     <div class="wrap nav-inner">
-      <a href="#top" class="nav-mark"><span class="dot"></span>F.JAADARI / 2026</a>
-      <div class="nav-links">
-        <a href="#now"><span class="num">01</span>NOW</a>
-        <a href="#experience"><span class="num">02</span>WORK</a>
-        <a href="#impact"><span class="num">03</span>IMPACT</a>
-        <a href="#skills"><span class="num">04</span>STACK</a>
-        <a href="#contact"><span class="num">05</span>CONTACT</a>
+      <a href="#top" class="nav-mark"><span class="pulse"></span>firas.jaadari</a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#now">Now</a>
+          <a href="#experience">Work</a>
+          <a href="#impact">Impact</a>
+          <a href="#writing">Writing</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <!-- sun (shows in dark mode) -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+          <!-- moon (shows in light mode) -->
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
@@ -696,29 +753,44 @@
   <!--  HERO                                                           -->
   <!-- ============================================================== -->
   <header class="hero wrap" id="top">
-    <div class="hero-meta">
-      <span>Senior AI / ML Engineer</span>
-      <span>Nantes — Paris, FR</span>
-      <span>Available for senior roles</span>
-    </div>
+    <div class="hero-grid">
+      <div>
+        <span class="hero-eyebrow"><span class="dot"></span>Available for senior roles</span>
+        <h1 class="hero-title">Senior <span class="accent">AI / ML</span> engineer building production LLM systems.</h1>
+        <p class="hero-sub">
+          Five years shipping LLM platforms across <strong>Crédit Agricole</strong>, <strong>Carrefour</strong>, and <strong>Elyadata</strong>. RAG pipelines, agent orchestration, fine-tuning, inference serving — from prototype to SLO-bound production.
+        </p>
+        <div class="hero-meta">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Nantes &middot; Paris, FR
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            5 years experience
+          </span>
+        </div>
+        <div class="hero-cta">
+          <a href="#experience" class="btn primary">See the work
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#contact" class="btn">Get in touch</a>
+        </div>
+      </div>
 
-    <h1 class="hero-title">
-      Building production <span class="ital">LLM systems,</span> end-to-end.
-    </h1>
+      <!-- ============================================================== -->
+      <!--  PROFILE PHOTO                                                  -->
+      <!--  To use a real photo: drop your photo at /assets/photo.jpg     -->
+      <!--  and replace the .photo-frame contents below with:             -->
+      <!--    <img src="assets/photo.jpg" alt="Firas Jaadari">            -->
+      <!-- ============================================================== -->
+      <div class="photo-wrap">
+        <div class="photo-frame">
+          <!-- Placeholder: initials. Replace with <img> when you have a photo -->
+          FJ
+        </div>
+      </div>
 
-    <p class="hero-sub">
-      Five years shipping and operating LLM platforms across <strong>Crédit Agricole</strong>, <strong>Carrefour</strong>, and <strong>Elyadata</strong>. RAG pipelines, agent orchestration, fine-tuning, inference serving — from the prototype on the whiteboard to the SLO on the dashboard.
-    </p>
-
-    <div class="hero-cta">
-      <a href="#experience" class="btn primary">See the work</a>
-      <a href="#contact" class="btn">Get in touch</a>
-    </div>
-
-    <div class="hero-floor">
-      <span>04 / 2026</span>
-      <span class="scroll-hint">scroll</span>
-      <span>v.01</span>
     </div>
   </header>
 
@@ -726,31 +798,34 @@
   <!--  NOW                                                            -->
   <!-- ============================================================== -->
   <section id="now" class="section wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">01</span>NOW</div>
+    <div class="section-head reveal">
       <div>
-        <p class="now-body reveal">
-          Currently designing the <em>Group-wide LLM Socle Platform</em> at Crédit Agricole — the foundational GenAI infrastructure powering every internal AI initiative across the bank's entities.
-        </p>
-        <dl class="now-meta reveal">
-          <div>
-            <dt>Role</dt>
-            <dd>Generative AI Engineer</dd>
-          </div>
-          <div>
-            <dt>Org</dt>
-            <dd>Crédit Agricole Technologies &amp; Services</dd>
-          </div>
-          <div>
-            <dt>Based</dt>
-            <dd>Nantes, France</dd>
-          </div>
-          <div>
-            <dt>Since</dt>
-            <dd>January 2025</dd>
-          </div>
-        </dl>
+        <div class="section-tag"><span class="slash">/</span>NOW</div>
+        <h2 class="section-title">What I'm working on</h2>
       </div>
+    </div>
+    <div class="now-card reveal">
+      <p class="now-text">
+        Currently designing the <strong>Group-wide LLM Socle Platform</strong> at Crédit Agricole — the foundational GenAI infrastructure powering every internal AI initiative across the bank's entities. Three layers (exposure, orchestration, contextualization), strict SLOs on latency, cost, and compliance.
+      </p>
+      <dl class="now-stats">
+        <div class="now-stat">
+          <dt>Role</dt>
+          <dd>Generative AI Engineer</dd>
+        </div>
+        <div class="now-stat">
+          <dt>Org</dt>
+          <dd>Crédit Agricole T&amp;S</dd>
+        </div>
+        <div class="now-stat">
+          <dt>Based</dt>
+          <dd>Nantes, France</dd>
+        </div>
+        <div class="now-stat">
+          <dt>Since</dt>
+          <dd>Jan 2025</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
@@ -758,221 +833,166 @@
   <!--  EXPERIENCE                                                     -->
   <!-- ============================================================== -->
   <section id="experience" class="section wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">02</span>WORK</div>
-      <div class="xp-list">
-
-        <!-- CREDIT AGRICOLE -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">Crédit Agricole</h2>
-            <span class="xp-when">Jan 2025 — Now</span>
-          </div>
-          <p class="xp-role">Generative AI Engineer<span class="sep">·</span>Group-wide LLM Socle Platform<span class="sep">·</span>Nantes</p>
-          <ul class="xp-bullets">
-            <li>Architected the platform's three layers (<strong>exposure, orchestration, contextualization</strong>) applying clean-architecture principles to decouple inference, reasoning, retrieval, and governance.</li>
-            <li>Shipped the production <strong>inference gateway</strong> (FastAPI on EC2) — OpenAI-compatible API exposing sync, streaming, and batch endpoints for inference, embeddings, reranking, and guardrails. Now the backbone for every internal GenAI app.</li>
-            <li>Built <strong>GenLib</strong>, a Python SDK / Lambda Layer using Protocols (PEP 544) and Strategy/Factory patterns — application teams plug in providers and tools without forking the core.</li>
-            <li>Designed the <strong>agent orchestrator</strong> on LangChain / LangGraph with tool calling, MCP support, two-tier memory (DynamoDB + summarization), and token-aware <strong>context compaction</strong>.</li>
-            <li>Built a <strong>contextualized chunking</strong> framework (semantic, hierarchical, BM25, hybrid) — cut RAG retrieval errors by <span class="metric">62%</span>. Supports Naive, Fusion, Graph, and Agentic RAG out of the box.</li>
-            <li>Stood up the observability stack (CloudWatch + Grafana + Prometheus + OpenTelemetry) and release-gating eval pipelines on <strong>DeepEval</strong> and <strong>RAGAS</strong> — faithfulness, context precision, hallucination tracked across model versions.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">AWS Bedrock</span>
-            <span class="stack-tag">SageMaker</span>
-            <span class="stack-tag">Lambda</span>
-            <span class="stack-tag">DynamoDB</span>
-            <span class="stack-tag">LangChain</span>
-            <span class="stack-tag">LangGraph</span>
-            <span class="stack-tag">FastAPI</span>
-            <span class="stack-tag">Terraform</span>
-            <span class="stack-tag">Docker</span>
-            <span class="stack-tag">DeepEval</span>
-            <span class="stack-tag">RAGAS</span>
-            <span class="stack-tag">MLflow</span>
-            <span class="stack-tag">Grafana</span>
-          </div>
-        </article>
-
-        <!-- CARREFOUR -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">Carrefour</h2>
-            <span class="xp-when">May 2024 — Jan 2025</span>
-          </div>
-          <p class="xp-role">Generative AI Engineer<span class="sep">·</span>Elpy — autonomous support-ticket resolution<span class="sep">·</span>Paris</p>
-          <ul class="xp-bullets">
-            <li>Built Elpy, a conversational LLM agent combining intent classification, tool calling, and retrieval — drove <span class="metric">60% ticket deflection</span> (18K → 7.2K tickets/month).</li>
-            <li>Fine-tuned <strong>GPT-3.5-turbo</strong> on 12K curated conversations: <span class="metric">75% inference cost cut</span> vs. GPT-4 with <span class="metric">94% F1</span> across 47 intent classes.</li>
-            <li>Generated synthetic training data with GPT-4 to <strong>4×</strong> the dataset — improved edge-case coverage by <span class="metric">340%</span>.</li>
-            <li>Pioneered <strong>RAG Fusion</strong> (parallel retrieval over query reformulations + reciprocal rank fusion) — <span class="metric">+31% NDCG@5</span>.</li>
-            <li>Deployed semantic caching (Redis + sentence-transformers) reaching <span class="metric">68% cache hit rate</span> and saving <span class="metric">$8K / month</span> in API costs.</li>
-            <li>Led A/B tests across 50K requests comparing GPT-4, fine-tuned models, and RAG variants on CSAT and resolution rate.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Azure OpenAI</span>
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">LangChain</span>
-            <span class="stack-tag">Redis</span>
-            <span class="stack-tag">FastAPI</span>
-            <span class="stack-tag">Docker</span>
-            <span class="stack-tag">Fine-tuning</span>
-            <span class="stack-tag">A/B Testing</span>
-          </div>
-        </article>
-
-        <!-- ELYADATA -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">Elyadata</h2>
-            <span class="xp-when">Dec 2023 — Jan 2025</span>
-          </div>
-          <p class="xp-role">Data Scientist<span class="sep">·</span>NL-to-SQL platform &amp; LLM inference<span class="sep">·</span>Tunis</p>
-          <ul class="xp-bullets">
-            <li>Engineered the inference microservice on <strong>vLLM + PagedAttention</strong> — <span class="metric">5× throughput</span> over the baseline.</li>
-            <li>Benchmarked 15 open-source LLMs (Llama-2, Mistral, Falcon) on custom SQL generation; selected Mistral-7B with <span class="metric">87% accuracy</span> at <span class="metric">120ms P95</span>.</li>
-            <li>Extended Arabic support: benchmarked AraBART and Jais-13B, fine-tuned <strong>AceGPT-7B</strong> on code-switched data — <span class="metric">91% accuracy</span>.</li>
-            <li>Built a <strong>Graph RAG</strong> pipeline: hybrid entity extraction (NER <span class="metric">93% F1</span> + LLM relation extraction) → Neo4j (<strong>2M nodes, 5M edges</strong>) → Cypher generation at <span class="metric">78% execution success</span>.</li>
-            <li>Implemented sparse embeddings (<strong>SPLADE</strong>) + hybrid retrieval (dense + BM25 + learned fusion) — <span class="metric">+15% recall</span>.</li>
-            <li>Prototyped Self-RAG, CRAG (Corrective RAG), and HyDE in the internal research group; filed feature requests on <strong>vLLM</strong> and <strong>SGLang</strong>.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">vLLM</span>
-            <span class="stack-tag">PyTorch</span>
-            <span class="stack-tag">HuggingFace</span>
-            <span class="stack-tag">Neo4j</span>
-            <span class="stack-tag">FastAPI</span>
-            <span class="stack-tag">LangChain</span>
-            <span class="stack-tag">Kubernetes</span>
-            <span class="stack-tag">SPLADE</span>
-          </div>
-        </article>
-
-        <!-- DIGEHEALTH -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">DigeHealth</h2>
-            <span class="xp-when">Feb — Jul 2024</span>
-          </div>
-          <p class="xp-role">Data Scientist (Freelance)<span class="sep">·</span>AI for non-invasive GI diagnostics<span class="sep">·</span>Remote</p>
-          <ul class="xp-bullets">
-            <li>End-to-end audio ML pipeline for bowel-sound analysis: denoising, bandpass filtering, segmentation, and 1D-to-2D spectrogram transformation (Mel, log-Mel).</li>
-            <li>Object detection (<strong>YOLOv5/v8, Faster R-CNN</strong>) to localize abnormal time-frequency regions; <strong>ResNet/EfficientNet</strong> classifiers for normal vs. pathological patterns.</li>
-            <li>MLflow lifecycle tracking, GPU inference optimization, and clinical validation with medical experts.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">PyTorch</span>
-            <span class="stack-tag">YOLO</span>
-            <span class="stack-tag">MLflow</span>
-            <span class="stack-tag">Signal Processing</span>
-            <span class="stack-tag">Streamlit</span>
-          </div>
-        </article>
-
-        <!-- INFOR -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">Infor</h2>
-            <span class="xp-when">Feb — Aug 2023</span>
-          </div>
-          <p class="xp-role">Machine Learning Intern<span class="sep">·</span>DB-degradation prediction for the M3 ERP<span class="sep">·</span>Tunis</p>
-          <ul class="xp-bullets">
-            <li>Time-series models predicting real database-degradation incidents in multi-tenant SaaS before tenant impact; deployed on <strong>Amazon SageMaker</strong> with real-time endpoints, monitoring, and explainability via SHAP/LIME for the SRE team.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">SageMaker</span>
-            <span class="stack-tag">XGBoost</span>
-            <span class="stack-tag">SHAP</span>
-          </div>
-        </article>
-
-        <!-- OMDENA -->
-        <article class="xp-item reveal">
-          <div class="xp-head">
-            <h2 class="xp-company">Omdena</h2>
-            <span class="xp-when">Sep 2021 — Nov 2022</span>
-          </div>
-          <p class="xp-role">Machine Learning Engineer<span class="sep">·</span>AI-assisted humanitarian mapping<span class="sep">·</span>Remote</p>
-          <ul class="xp-bullets">
-            <li>Trained <strong>U-Net</strong> and <strong>DeepLabV3+</strong> for building footprint segmentation with transfer learning from RAMP; co-developed <strong>HOTLib</strong>, an open-source library for geospatial preprocessing and inference.</li>
-          </ul>
-          <div class="xp-stack">
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">PyTorch</span>
-            <span class="stack-tag">Image Segmentation</span>
-            <span class="stack-tag">Open Source</span>
-          </div>
-        </article>
-
+    <div class="section-head reveal">
+      <div>
+        <div class="section-tag"><span class="slash">/</span>WORK</div>
+        <h2 class="section-title">Experience</h2>
       </div>
+    </div>
+    <div class="xp-list">
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">Crédit Agricole</h3>
+          <span class="xp-when">Jan 2025 — Now</span>
+        </div>
+        <p class="xp-role">Generative AI Engineer<span class="sep">·</span>LLM Socle Platform<span class="sep">·</span>Nantes</p>
+        <ul class="xp-bullets">
+          <li>Architected the platform's three layers — <strong>exposure, orchestration, contextualization</strong> — applying clean-architecture principles to decouple inference, reasoning, retrieval, and governance.</li>
+          <li>Shipped the production <strong>inference gateway</strong> (FastAPI on EC2): OpenAI-compatible API exposing sync, streaming, and batch endpoints for inference, embeddings, reranking, and guardrails. Backbone for every internal GenAI app.</li>
+          <li>Built <strong>GenLib</strong>, a Python SDK / Lambda Layer using Protocols (PEP 544) and Strategy/Factory patterns — application teams plug in providers and tools without forking the core.</li>
+          <li>Designed the <strong>agent orchestrator</strong> on LangChain / LangGraph with tool calling, MCP support, two-tier memory (DynamoDB + summarization), and token-aware <strong>context compaction</strong>.</li>
+          <li>Built a <strong>contextualized chunking</strong> framework (semantic, hierarchical, BM25, hybrid) — cut RAG retrieval errors by <span class="metric">62%</span>. Supports Naive, Fusion, Graph, and Agentic RAG out of the box.</li>
+          <li>Stood up observability (CloudWatch + Grafana + Prometheus + OTel) and release-gating eval pipelines on <strong>DeepEval</strong> and <strong>RAGAS</strong> tracking faithfulness, context precision, and hallucination across model versions.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">AWS Bedrock</span><span class="stack-tag">SageMaker</span><span class="stack-tag">Lambda</span><span class="stack-tag">DynamoDB</span><span class="stack-tag">LangChain</span><span class="stack-tag">LangGraph</span><span class="stack-tag">FastAPI</span><span class="stack-tag">Terraform</span><span class="stack-tag">DeepEval</span><span class="stack-tag">RAGAS</span><span class="stack-tag">MLflow</span>
+        </div>
+      </article>
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">Carrefour</h3>
+          <span class="xp-when">May 2024 — Jan 2025</span>
+        </div>
+        <p class="xp-role">Generative AI Engineer<span class="sep">·</span>Elpy — autonomous support resolution<span class="sep">·</span>Paris</p>
+        <ul class="xp-bullets">
+          <li>Built Elpy, a conversational LLM agent combining intent classification, tool calling, and retrieval — drove <span class="metric">60% ticket deflection</span> (18K → 7.2K tickets/month).</li>
+          <li>Fine-tuned <strong>GPT-3.5-turbo</strong> on 12K curated conversations: <span class="metric">75% inference cost cut</span> vs. GPT-4 with <span class="metric">94% F1</span> across 47 intent classes.</li>
+          <li>Generated synthetic training data with GPT-4 to <strong>4×</strong> the dataset — improved edge-case coverage by <span class="metric">340%</span>.</li>
+          <li>Pioneered <strong>RAG Fusion</strong> (parallel retrieval over query reformulations + reciprocal rank fusion) — <span class="metric">+31% NDCG@5</span>.</li>
+          <li>Deployed semantic caching (Redis + sentence-transformers) reaching <span class="metric">68% cache hit rate</span> and saving <span class="metric">$8K / month</span>.</li>
+          <li>Led A/B tests across 50K requests comparing GPT-4, fine-tuned models, and RAG variants on CSAT and resolution rate.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Azure OpenAI</span><span class="stack-tag">Python</span><span class="stack-tag">LangChain</span><span class="stack-tag">Redis</span><span class="stack-tag">FastAPI</span><span class="stack-tag">Fine-tuning</span><span class="stack-tag">A/B Testing</span>
+        </div>
+      </article>
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">Elyadata</h3>
+          <span class="xp-when">Dec 2023 — Jan 2025</span>
+        </div>
+        <p class="xp-role">Data Scientist<span class="sep">·</span>NL-to-SQL platform &amp; LLM inference<span class="sep">·</span>Tunis</p>
+        <ul class="xp-bullets">
+          <li>Engineered the inference microservice on <strong>vLLM + PagedAttention</strong> — <span class="metric">5× throughput</span> over the baseline.</li>
+          <li>Benchmarked 15 open-source LLMs (Llama-2, Mistral, Falcon) on custom SQL generation; selected Mistral-7B with <span class="metric">87% accuracy</span> at <span class="metric">120ms P95</span>.</li>
+          <li>Extended Arabic support: benchmarked AraBART and Jais-13B, fine-tuned <strong>AceGPT-7B</strong> on code-switched data — <span class="metric">91% accuracy</span>.</li>
+          <li>Built <strong>Graph RAG</strong> pipeline: hybrid entity extraction (NER <span class="metric">93% F1</span> + LLM relation extraction) → Neo4j (2M nodes, 5M edges) → Cypher generation at <span class="metric">78% execution success</span>.</li>
+          <li>Implemented <strong>SPLADE</strong> sparse embeddings + hybrid retrieval (dense + BM25 + learned fusion) — <span class="metric">+15% recall</span>.</li>
+          <li>Prototyped Self-RAG, CRAG, and HyDE in the internal research group; filed feature requests on <strong>vLLM</strong> and <strong>SGLang</strong>.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">vLLM</span><span class="stack-tag">PyTorch</span><span class="stack-tag">HuggingFace</span><span class="stack-tag">Neo4j</span><span class="stack-tag">FastAPI</span><span class="stack-tag">Kubernetes</span><span class="stack-tag">SPLADE</span>
+        </div>
+      </article>
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">DigeHealth</h3>
+          <span class="xp-when">Feb — Jul 2024</span>
+        </div>
+        <p class="xp-role">Data Scientist (Freelance)<span class="sep">·</span>AI for non-invasive GI diagnostics<span class="sep">·</span>Remote</p>
+        <ul class="xp-bullets">
+          <li>End-to-end audio ML pipeline: denoising, bandpass filtering, segmentation, and 1D-to-2D spectrogram (Mel, log-Mel) transformation. Object detection (<strong>YOLOv5/v8, Faster R-CNN</strong>) for abnormal time-frequency regions, ResNet/EfficientNet classifiers for pathological patterns. MLflow lifecycle, GPU inference optimization, clinical validation with medical experts.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">YOLO</span><span class="stack-tag">MLflow</span><span class="stack-tag">Signal Processing</span>
+        </div>
+      </article>
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">Infor</h3>
+          <span class="xp-when">Feb — Aug 2023</span>
+        </div>
+        <p class="xp-role">Machine Learning Intern<span class="sep">·</span>DB-degradation prediction for the M3 ERP<span class="sep">·</span>Tunis</p>
+        <ul class="xp-bullets">
+          <li>Time-series models predicting real database-degradation incidents in multi-tenant SaaS before tenant impact; deployed on <strong>Amazon SageMaker</strong> with real-time endpoints, monitoring, and SHAP/LIME explainability for the SRE team.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">SageMaker</span><span class="stack-tag">XGBoost</span><span class="stack-tag">SHAP</span>
+        </div>
+      </article>
+
+      <article class="xp-item reveal">
+        <div class="xp-head">
+          <h3 class="xp-company">Omdena</h3>
+          <span class="xp-when">Sep 2021 — Nov 2022</span>
+        </div>
+        <p class="xp-role">Machine Learning Engineer<span class="sep">·</span>AI-assisted humanitarian mapping<span class="sep">·</span>Remote</p>
+        <ul class="xp-bullets">
+          <li>Trained <strong>U-Net</strong> and <strong>DeepLabV3+</strong> for building footprint segmentation with transfer learning from RAMP; co-developed <strong>HOTLib</strong>, an open-source library for geospatial preprocessing and inference.</li>
+        </ul>
+        <div class="xp-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">Image Segmentation</span><span class="stack-tag">Open Source</span>
+        </div>
+      </article>
+
     </div>
   </section>
 
   <!-- ============================================================== -->
   <!--  IMPACT                                                         -->
   <!-- ============================================================== -->
-  <section id="impact" class="section impact wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">03</span>IMPACT</div>
+  <section id="impact" class="section wrap">
+    <div class="section-head reveal">
       <div>
-        <p class="now-body reveal" style="max-width: 38ch; margin-bottom: 2.5rem;">
-          A handful of <em>numbers I'm proud of</em> — measured in production, not in slide decks.
-        </p>
-        <div class="impact-grid">
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="60" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">Support tickets deflected by the Elpy LLM agent.</div>
-            <div class="stat-where">Carrefour</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="5" data-suffix="×">0<span class="unit">×</span></div>
-            <div class="stat-label">Inference throughput gain via vLLM + PagedAttention.</div>
-            <div class="stat-where">Elyadata</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="62" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">Reduction in RAG retrieval error from contextual chunking.</div>
-            <div class="stat-where">Crédit Agricole</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="8" data-prefix="$" data-suffix="K">0<span class="unit">K</span></div>
-            <div class="stat-label">Monthly API spend saved by semantic caching.</div>
-            <div class="stat-where">Carrefour</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="75" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">Inference cost cut from fine-tuned GPT-3.5 vs. GPT-4.</div>
-            <div class="stat-where">Carrefour</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="94" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">F1-score across 47 intent classes after fine-tuning.</div>
-            <div class="stat-where">Carrefour</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="68" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">Cache hit rate on Redis semantic cache (sentence-transformers).</div>
-            <div class="stat-where">Carrefour</div>
-          </div>
-
-          <div class="stat reveal">
-            <div class="stat-num" data-target="91" data-suffix="%">0<span class="unit">%</span></div>
-            <div class="stat-label">Arabic accuracy from fine-tuned AceGPT-7B on code-switched data.</div>
-            <div class="stat-where">Elyadata</div>
-          </div>
-
-        </div>
+        <div class="section-tag"><span class="slash">/</span>IMPACT</div>
+        <h2 class="section-title">Numbers from production</h2>
+      </div>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="stat">
+        <div class="stat-num" data-target="60" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">Support tickets deflected by the Elpy LLM agent.</div>
+        <div class="stat-where">Carrefour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="5" data-suffix="×">0<span class="unit">×</span></div>
+        <div class="stat-label">Inference throughput gain via vLLM + PagedAttention.</div>
+        <div class="stat-where">Elyadata</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="62" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">Reduction in RAG retrieval error from contextual chunking.</div>
+        <div class="stat-where">Crédit Agricole</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="8" data-prefix="$" data-suffix="K">0<span class="unit">K</span></div>
+        <div class="stat-label">Monthly API spend saved by semantic caching.</div>
+        <div class="stat-where">Carrefour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="75" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">Inference cost cut from fine-tuned GPT-3.5 vs. GPT-4.</div>
+        <div class="stat-where">Carrefour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="94" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">F1-score across 47 intent classes after fine-tuning.</div>
+        <div class="stat-where">Carrefour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="68" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">Cache hit rate on Redis semantic cache.</div>
+        <div class="stat-where">Carrefour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="91" data-suffix="%">0<span class="unit">%</span></div>
+        <div class="stat-label">Arabic accuracy from fine-tuned AceGPT-7B.</div>
+        <div class="stat-where">Elyadata</div>
       </div>
     </div>
   </section>
@@ -981,51 +1001,92 @@
   <!--  SKILLS                                                         -->
   <!-- ============================================================== -->
   <section id="skills" class="section wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">04</span>STACK</div>
-      <div class="skill-cats">
-
-        <div class="skill-cat reveal">
-          <h3>LLM &amp; Agents</h3>
-          <p><span class="hl">LangChain</span>, <span class="hl">LangGraph</span>, LlamaIndex, Tool Calling, MCP, Guardrails, prompt &amp; context engineering, conversational memory.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Retrieval &amp; RAG</h3>
-          <p>Hybrid retrieval (dense + sparse + BM25), <span class="hl">SPLADE</span>, Cohere reranking, contextual chunking, <span class="hl">Graph RAG</span> on Neo4j, vector DBs, embeddings.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Training &amp; Fine-tuning</h3>
-          <p><span class="hl">PyTorch</span>, HuggingFace Transformers, PEFT (LoRA / Adapters), supervised fine-tuning, NER, JSONL pipelines, synthetic data generation.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Inference &amp; Serving</h3>
-          <p><span class="hl">vLLM</span> (PagedAttention, continuous batching), SGLang, Triton, HF Inference, AWS Bedrock, Azure OpenAI, quantization, KV-cache optimization, autoscaling.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Eval &amp; Observability</h3>
-          <p><span class="hl">DeepEval</span>, RAGAS, MLflow, hallucination / faithfulness / drift KPIs, A/B testing, Grafana, Prometheus, OpenTelemetry, CloudWatch.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Cloud &amp; Infrastructure</h3>
-          <p><span class="hl">AWS</span> (Bedrock, Lambda, SageMaker, EC2, DynamoDB, S3, Secrets Manager), Terraform, Docker, Kubernetes, Helm, GitLab/GitHub CI/CD.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Software Engineering</h3>
-          <p><span class="hl">Python</span>, FastAPI, Pydantic, Pytest, design patterns (Strategy, Factory, Visitor, Composite), clean architecture, Ruff, MyPy, C++.</p>
-        </div>
-
-        <div class="skill-cat reveal">
-          <h3>Leadership</h3>
-          <p>Code review, pair programming, technical mentoring, stakeholder communication across product / infra / business, Agile/Scrum.</p>
-        </div>
-
+    <div class="section-head reveal">
+      <div>
+        <div class="section-tag"><span class="slash">/</span>STACK</div>
+        <h2 class="section-title">Tools &amp; expertise</h2>
       </div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card reveal">
+        <h3>LLM &amp; Agents</h3>
+        <p><span class="hl">LangChain</span>, <span class="hl">LangGraph</span>, LlamaIndex, Tool Calling, MCP, Guardrails, prompt &amp; context engineering, conversational memory.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Retrieval &amp; RAG</h3>
+        <p>Hybrid retrieval (dense + sparse + BM25), <span class="hl">SPLADE</span>, Cohere reranking, contextual chunking, <span class="hl">Graph RAG</span> on Neo4j, vector DBs, embeddings.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Training &amp; Fine-tuning</h3>
+        <p><span class="hl">PyTorch</span>, HuggingFace Transformers, PEFT (LoRA / Adapters), supervised FT, NER, JSONL pipelines, synthetic data generation.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Inference &amp; Serving</h3>
+        <p><span class="hl">vLLM</span> (PagedAttention, continuous batching), SGLang, Triton, HF Inference, AWS Bedrock, Azure OpenAI, quantization, autoscaling.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Eval &amp; Observability</h3>
+        <p><span class="hl">DeepEval</span>, RAGAS, MLflow, hallucination / faithfulness / drift KPIs, A/B testing, Grafana, Prometheus, OpenTelemetry, CloudWatch.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Cloud &amp; Infra</h3>
+        <p><span class="hl">AWS</span> (Bedrock, Lambda, SageMaker, EC2, DynamoDB, S3), Terraform, Docker, Kubernetes, Helm, GitLab/GitHub CI/CD.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Engineering</h3>
+        <p><span class="hl">Python</span>, FastAPI, Pydantic, Pytest, design patterns (Strategy, Factory, Visitor), clean architecture, Ruff, MyPy, C++.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Leadership</h3>
+        <p>Code review, pair programming, technical mentoring, stakeholder communication across product / infra / business.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  WRITING                                                        -->
+  <!-- ============================================================== -->
+  <section id="writing" class="section wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-tag"><span class="slash">/</span>WRITING</div>
+        <h2 class="section-title">Notes &amp; thoughts</h2>
+      </div>
+    </div>
+    <div class="writing-list">
+
+      <a href="writing/contextual-chunking.html" class="post-card reveal">
+        <svg class="post-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        <div class="post-meta">
+          <span class="post-tag">RAG</span>
+          <span>April 2026</span>
+          <span class="dot">·</span>
+          <span>~8 min read</span>
+        </div>
+        <h3>On contextual chunking: how we cut RAG retrieval errors by 62%</h3>
+        <p>Naive chunking throws away the document's structure — and most retrieval failures we saw at Crédit Agricole came from chunks that were technically relevant but contextually orphaned. Here's how prepending hierarchical context changed the math.</p>
+      </a>
+
+      <a href="#" class="post-card reveal" style="opacity: 0.6; pointer-events: none;">
+        <svg class="post-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        <div class="post-meta">
+          <span class="post-tag">Inference</span>
+          <span>Coming soon</span>
+        </div>
+        <h3>The real cost of LLM inference: a framework for tradeoffs</h3>
+        <p>Latency vs. throughput vs. cost vs. quality. Most teams optimize one and pretend the others don't matter. A practical framework for thinking about these tradeoffs from first principles.</p>
+      </a>
+
+      <a href="#" class="post-card reveal" style="opacity: 0.6; pointer-events: none;">
+        <svg class="post-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        <div class="post-meta">
+          <span class="post-tag">Agents</span>
+          <span>Coming soon</span>
+        </div>
+        <h3>Agent design: when to use a graph, when to use a loop</h3>
+        <p>LangGraph vs. ReAct vs. plain function calling. The honest tradeoffs of each pattern when you actually have to ship and operate them.</p>
+      </a>
+
     </div>
   </section>
 
@@ -1033,60 +1094,54 @@
   <!--  AWARDS                                                         -->
   <!-- ============================================================== -->
   <section id="awards" class="section wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">05</span>RECOGNITION</div>
+    <div class="section-head reveal">
       <div>
-        <ul class="awards-list">
-          <li class="award reveal">
-            <span class="award-rank">1<sup>st</sup></span>
-            <div class="award-body">
-              <span class="name">AGEOS Challenge</span> — olive parcel classification &amp; mapping from Sentinel-2 multispectral time series.
-              <span class="meta">180+ participants</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">1<sup>st</sup></span>
-            <div class="award-body">
-              <span class="name">UmojaHack 2023</span> — Cryptojacking Detection Challenge.
-              <span class="meta">437 participants</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">1<sup>st</sup></span>
-            <div class="award-body">
-              <span class="name">AI Night Challenge 2023</span> — “Respirer Mieux” ML competition by Mobelite.
-              <span class="meta">Tunis</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">1<sup>st</sup></span>
-            <div class="award-body">
-              <span class="name">DataQuest Hackathon</span>.
-              <span class="meta">80+ participants</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">3<sup>rd</sup></span>
-            <div class="award-body">
-              <span class="name">Data Drive 2030</span> — global ML competition predicting early-learning outcomes.
-              <span class="meta">966 participants</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">3<sup>rd</sup></span>
-            <div class="award-body">
-              <span class="name">ActInSpace International Finals</span> — space-tech innovation challenge.
-              <span class="meta">International</span>
-            </div>
-          </li>
-          <li class="award reveal">
-            <span class="award-rank">9<sup>th</sup></span>
-            <div class="award-body">
-              <span class="name">UmojaHack 2023 — CO₂ Prediction</span> — 2nd nationally.
-              <span class="meta">763 participants · Africa-wide</span>
-            </div>
-          </li>
-        </ul>
+        <div class="section-tag"><span class="slash">/</span>RECOGNITION</div>
+        <h2 class="section-title">Awards &amp; competitions</h2>
+      </div>
+    </div>
+    <div class="awards-list">
+      <div class="award reveal">
+        <span class="award-rank">1<sup>st</sup></span>
+        <div>
+          <span class="award-name">AGEOS Challenge</span> &mdash; <span class="award-desc">olive parcel classification &amp; mapping from Sentinel-2 multispectral time series.</span>
+          <span class="award-meta">180+ participants</span>
+        </div>
+      </div>
+      <div class="award reveal">
+        <span class="award-rank">1<sup>st</sup></span>
+        <div>
+          <span class="award-name">UmojaHack 2023</span> &mdash; <span class="award-desc">Cryptojacking Detection Challenge.</span>
+          <span class="award-meta">437 participants</span>
+        </div>
+      </div>
+      <div class="award reveal">
+        <span class="award-rank">1<sup>st</sup></span>
+        <div>
+          <span class="award-name">AI Night Challenge 2023</span> &mdash; <span class="award-desc">"Respirer Mieux" ML competition by Mobelite.</span>
+          <span class="award-meta">Tunis</span>
+        </div>
+      </div>
+      <div class="award reveal">
+        <span class="award-rank">1<sup>st</sup></span>
+        <div>
+          <span class="award-name">DataQuest Hackathon</span>
+          <span class="award-meta">80+ participants</span>
+        </div>
+      </div>
+      <div class="award reveal">
+        <span class="award-rank">3<sup>rd</sup></span>
+        <div>
+          <span class="award-name">Data Drive 2030</span> &mdash; <span class="award-desc">global ML competition predicting early-learning outcomes.</span>
+          <span class="award-meta">966 participants</span>
+        </div>
+      </div>
+      <div class="award reveal">
+        <span class="award-rank">3<sup>rd</sup></span>
+        <div>
+          <span class="award-name">ActInSpace International Finals</span> &mdash; <span class="award-desc">space-tech innovation challenge.</span>
+          <span class="award-meta">International</span>
+        </div>
       </div>
     </div>
   </section>
@@ -1094,37 +1149,14 @@
   <!-- ============================================================== -->
   <!--  CONTACT                                                        -->
   <!-- ============================================================== -->
-  <section id="contact" class="contact wrap">
-    <div class="section-grid">
-      <div class="section-label reveal"><span class="num">06</span>CONTACT</div>
-      <div>
-        <h2 class="reveal">Let's <span class="ital">build</span> something.</h2>
-        <p class="reveal">
-          Open to senior LLM / Generative AI roles in Paris, Nantes, or remote. Always happy to talk shop about RAG quality, agent design, inference economics, or anything LLM-systems-flavored.
-        </p>
-
-        <div class="contact-rows">
-          <a href="mailto:jaadari.firas99@gmail.com" class="contact-row reveal">
-            <span class="contact-label">Email</span>
-            <span class="contact-value">jaadari.firas99@gmail.com</span>
-            <span class="contact-arrow">→</span>
-          </a>
-          <a href="https://www.linkedin.com/in/jaadarix/" target="_blank" rel="noopener" class="contact-row reveal">
-            <span class="contact-label">LinkedIn</span>
-            <span class="contact-value">/in/jaadarix</span>
-            <span class="contact-arrow">→</span>
-          </a>
-          <a href="https://github.com/JAADARI" target="_blank" rel="noopener" class="contact-row reveal">
-            <span class="contact-label">GitHub</span>
-            <span class="contact-value">/JAADARI</span>
-            <span class="contact-arrow">→</span>
-          </a>
-          <a href="tel:+33646524109" class="contact-row reveal">
-            <span class="contact-label">Phone</span>
-            <span class="contact-value">+33 6 46 52 41 09</span>
-            <span class="contact-arrow">→</span>
-          </a>
-        </div>
+  <section id="contact" class="section wrap">
+    <div class="contact-card reveal">
+      <h2>Let's <span class="accent">build</span> something.</h2>
+      <p>Open to senior LLM / Generative AI roles in Paris, Nantes, or remote. Always happy to talk shop about RAG quality, agent design, inference economics — or anything LLM-systems-flavored.</p>
+      <div class="contact-links">
+        <a href="mailto:jaadari.firas99@gmail.com" class="btn primary">Email me</a>
+        <a href="https://www.linkedin.com/in/jaadarix/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+        <a href="https://github.com/JAADARI" target="_blank" rel="noopener" class="btn">GitHub</a>
       </div>
     </div>
   </section>
@@ -1134,9 +1166,8 @@
   <!-- ============================================================== -->
   <footer class="wrap">
     <div class="foot-inner">
-      <span>© 2026 — F. Jaadari</span>
-      <span>Hand-crafted in HTML/CSS · No frameworks harmed</span>
-      <a href="#top">↑ TO TOP</a>
+      <span>© 2026 Firas Jaadari</span>
+      <span><a href="#top">↑ back to top</a></span>
     </div>
   </footer>
 
@@ -1144,14 +1175,21 @@
   <!--  SCRIPTS                                                        -->
   <!-- ============================================================== -->
   <script>
-    // ---------- nav: shadow on scroll ----------
+    // ---------- theme toggle ----------
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    // ---------- nav border on scroll ----------
     const nav = document.getElementById('nav');
     const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
     // ---------- reveal on scroll ----------
-    const revealEls = document.querySelectorAll('.reveal');
     const ro = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -1160,7 +1198,7 @@
         }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    revealEls.forEach((el) => ro.observe(el));
+    document.querySelectorAll('.reveal').forEach((el) => ro.observe(el));
 
     // ---------- count-up for impact stats ----------
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
@@ -1168,7 +1206,7 @@
       const target = parseFloat(el.dataset.target);
       const prefix = el.dataset.prefix || '';
       const suffix = el.dataset.suffix || '';
-      const duration = 1400;
+      const duration = 1300;
       const start = performance.now();
       const tick = (now) => {
         const t = Math.min((now - start) / duration, 1);

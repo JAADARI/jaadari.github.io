@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>On contextual chunking — Firas Jaadari</title>
+  <meta name="description" content="How prepending hierarchical context to RAG chunks cut retrieval errors by 62% in a production banking deployment." />
+
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = saved || sys;
+      } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@300..600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Same tokens as main site */
+    :root {
+      --bg: #fafafa;
+      --surface-1: #ffffff;
+      --surface-2: #f4f4f5;
+      --ink: #09090b;
+      --ink-2: #3f3f46;
+      --ink-3: #71717a;
+      --ink-4: #a1a1aa;
+      --rule: #e4e4e7;
+      --rule-strong: #d4d4d8;
+      --accent: #0046ff;
+      --accent-soft: rgba(0, 70, 255, 0.08);
+      --accent-fg: #ffffff;
+      --grid-line: rgba(0,0,0,0.04);
+    }
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --surface-1: #111114;
+      --surface-2: #18181c;
+      --ink: #fafafa;
+      --ink-2: #d4d4d8;
+      --ink-3: #a1a1aa;
+      --ink-4: #71717a;
+      --rule: #27272a;
+      --rule-strong: #3f3f46;
+      --accent: #5b8cff;
+      --accent-soft: rgba(91, 140, 255, 0.12);
+      --accent-fg: #09090b;
+      --grid-line: rgba(255,255,255,0.04);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Geist', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      letter-spacing: -0.005em;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.15s ease; }
+    a:hover { opacity: 0.8; }
+    code { font-family: 'Geist Mono', monospace; font-size: 0.9em; }
+    ::selection { background: var(--accent); color: var(--accent-fg); }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(12px) saturate(150%);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      transition: color 0.15s ease;
+    }
+    .nav-back:hover { color: var(--ink); opacity: 1; }
+    .icon-btn {
+      width: 36px; height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--rule);
+      background: var(--surface-1);
+      border-radius: 8px;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .icon-btn:hover { color: var(--ink); border-color: var(--rule-strong); }
+    .icon-btn svg { width: 16px; height: 16px; }
+    [data-theme="light"] .icon-btn .icon-moon { display: none; }
+    [data-theme="dark"]  .icon-btn .icon-sun  { display: none; }
+
+    /* ARTICLE */
+    article {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem clamp(1.25rem, 4vw, 2.5rem) 6rem;
+    }
+    .post-meta {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--ink-4);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .post-tag {
+      padding: 0.25rem 0.6rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 4px;
+    }
+    .dot { color: var(--ink-4); }
+
+    h1 {
+      font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      color: var(--ink);
+    }
+    .lede {
+      font-size: 1.15rem;
+      line-height: 1.55;
+      color: var(--ink-3);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    article h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      color: var(--ink);
+    }
+    article h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: var(--ink);
+    }
+    article p, article ul, article ol {
+      color: var(--ink-2);
+      margin-bottom: 1.25rem;
+    }
+    article ul, article ol {
+      padding-left: 1.5rem;
+    }
+    article ul li { list-style: disc; margin-bottom: 0.5rem; }
+    article ol li { list-style: decimal; margin-bottom: 0.5rem; }
+    article strong { color: var(--ink); font-weight: 600; }
+
+    /* Inline code */
+    article :not(pre) > code {
+      padding: 0.15em 0.4em;
+      background: var(--surface-2);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      font-size: 0.86em;
+      color: var(--accent);
+    }
+
+    /* Code block */
+    pre {
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+    pre code {
+      color: var(--ink-2);
+      font-family: 'Geist Mono', monospace;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 0.5rem 1.25rem;
+      margin: 2rem 0;
+      color: var(--ink-2);
+      font-style: italic;
+    }
+
+    /* Inline metric callout */
+    .metric {
+      color: var(--accent);
+      font-family: 'Geist Mono', monospace;
+      font-weight: 500;
+      padding: 0.05em 0.35em;
+      background: var(--accent-soft);
+      border-radius: 4px;
+    }
+
+    /* End of post */
+    .post-end {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+    }
+    .post-end a { color: var(--ink-3); }
+    .post-end a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html#writing" class="nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        back to writing
+      </a>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <article>
+    <div class="post-meta">
+      <span class="post-tag">RAG</span>
+      <span>April 2026</span>
+      <span class="dot">·</span>
+      <span>~8 min read</span>
+    </div>
+
+    <h1>On contextual chunking: how we cut RAG retrieval errors by 62%</h1>
+
+    <p class="lede">
+      Naive chunking throws away the document's structure — and most retrieval failures we saw in production at Crédit Agricole came from chunks that were technically relevant but contextually orphaned. Here's how prepending hierarchical context changed the math.
+    </p>
+
+    <h2>The problem with chunking</h2>
+
+    <p>
+      <em>[Draft note: open with the concrete failure mode you saw. A user query that should have returned a clear answer, a chunk that was technically relevant, but the model couldn't ground it without surrounding context. This is your hook.]</em>
+    </p>
+
+    <p>
+      When you split a document for embedding, you're making an implicit bet: that each chunk carries enough self-contained meaning to be retrieved on its own merits. For a lot of documents — short FAQs, articles with self-explanatory paragraphs — that bet pays off. For dense, hierarchical, internal documents (regulatory texts, technical specs, banking policies), it falls apart.
+    </p>
+
+    <p>
+      A chunk that says <em>"this category is excluded from the calculation"</em> is technically meaningful, but it's useless on retrieval — it doesn't tell you which category, which calculation, or which policy. Embedding it plus its surrounding context separately means the chunk's vector lives somewhere far from where its meaning actually points.
+    </p>
+
+    <h2>What we built</h2>
+
+    <p>
+      The fix is mechanically simple: before embedding each chunk, prepend a short, structured summary of where it sits in the document hierarchy. Section title, parent section, document title, sometimes the immediately preceding paragraph's topic.
+    </p>
+
+    <p>
+      <em>[Draft note: insert your concrete schema here. Something like:]</em>
+    </p>
+
+    <pre><code>// Each chunk before embedding:
+{
+  "context": "Document: Risk Policy v3.2 / Section 4.1: Exclusions / Subsection: Retail",
+  "content": "[the actual chunk text]"
+}</code></pre>
+
+    <p>
+      The embedding then sits in semantic space at a coordinate that reflects <em>both</em> what the chunk says and where it lives. A query about <em>"retail risk exclusions"</em> now retrieves a chunk whose vector knows it's about retail risk exclusions, even when the chunk itself never says those words.
+    </p>
+
+    <h3>Implementation tradeoffs</h3>
+
+    <p>
+      <em>[Draft note: discuss the tradeoffs you actually faced — token cost of context prepending, how much context is too much, whether to use the LLM to generate the context summary or rely on document structure parsers, etc.]</em>
+    </p>
+
+    <ul>
+      <li><strong>Context length</strong> — too little and you don't disambiguate; too much and you dilute the chunk's signal.</li>
+      <li><strong>Context generation</strong> — manual structural parsing is cheap and deterministic; LLM-generated context is richer but introduces latency and a quality dependency.</li>
+      <li><strong>Hybrid retrieval</strong> — we paired this with BM25 indexing on the contextualized chunk to keep keyword precision.</li>
+    </ul>
+
+    <h2>Results</h2>
+
+    <p>
+      Measured on our internal eval set (n &asymp; 2.4k Q/A pairs spanning regulatory, product, and operational documents), retrieval error rate dropped by <span class="metric">62%</span>. Faithfulness on downstream generation, measured with RAGAS, improved by <em>[XX%]</em>. Context precision improved by <em>[YY%]</em>.
+    </p>
+
+    <blockquote>
+      The biggest gains weren't on the easy queries — those were already solved. They were on the long-tail, multi-hop questions where naive chunking lost the structural breadcrumbs.
+    </blockquote>
+
+    <p>
+      <em>[Draft note: include a chart or a table of the eval comparison if you can. Even a simple before/after on three or four metrics works.]</em>
+    </p>
+
+    <h2>What I'd do differently</h2>
+
+    <p>
+      <em>[Draft note: this is where you separate the post from a marketing piece — be honest about what didn't work, what you'd skip in v2, what you'd push further. The reader wants to know you've thought past the headline.]</em>
+    </p>
+
+    <p>
+      In retrospect, the biggest win wasn't the chunking strategy itself — it was building the eval pipeline first. Without DeepEval and RAGAS scoring every retrieval change against a frozen test set, we'd have shipped half a dozen subjectively "better" chunkers and chased phantom regressions. Instrument before you optimize.
+    </p>
+
+    <h2>Further reading</h2>
+
+    <ul>
+      <li><a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Anthropic's contextual retrieval write-up</a> — the closest published work to what we built.</li>
+      <li><em>[Draft note: link to whatever papers/posts informed your design — RAGAS paper, BM25 hybrid retrieval references, etc.]</em></li>
+    </ul>
+
+    <div class="post-end">
+      <span>— Firas Jaadari, April 2026</span>
+      <span><a href="../index.html#writing">More writing →</a></span>
+    </div>
+
+  </article>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  </script>
+</body>
+</html>
