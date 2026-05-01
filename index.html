@@ -16,6 +16,33 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2" />
   <link rel="shortcut icon" href="assets/favicon.svg?v=2" />
 
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Firas Jaadari",
+    "jobTitle": "Senior AI / ML Engineer",
+    "url": "https://jaadari.github.io",
+    "image": "https://jaadari.github.io/assets/photo.webp",
+    "email": "jaadari.firas99@gmail.com",
+    "sameAs": [
+      "https://www.linkedin.com/in/jaadarix/",
+      "https://github.com/JAADARI"
+    ],
+    "knowsAbout": ["Large Language Models", "RAG", "AI Agents", "Fine-tuning", "Inference Optimization", "Python", "PyTorch"],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Crédit Agricole"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Nantes",
+      "addressCountry": "FR"
+    }
+  }
+  </script>
+
   <!-- Theme: apply before paint to avoid flash -->
   <script>
     (function () {
@@ -197,8 +224,18 @@
       padding-top: 8rem;
       padding-bottom: 4rem;
       position: relative;
+      overflow: hidden;
+    }
+    #hero-vanta {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.35;
     }
     .hero-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: 1fr;
       gap: 3rem;
@@ -721,6 +758,273 @@
       .reveal { opacity: 1; transform: none; }
       .photo-wrap::before { animation: none; }
     }
+
+    /* =================================================================
+       EXPERIENCE SHOW MORE
+       ================================================================= */
+    .xp-collapsed {
+      position: relative;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .xp-collapsed.open {
+      max-height: 3000px;
+    }
+    /* Fade-out gradient when collapsed */
+    .xp-fade {
+      position: relative;
+    }
+    .xp-fade::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 0;
+      pointer-events: none;
+    }
+    .xp-fade.open::after {
+      opacity: 0;
+    }
+    /* Show more button */
+    .xp-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .xp-toggle-wrap::before,
+    .xp-toggle-wrap::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+    .xp-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: 'Geist', sans-serif;
+      letter-spacing: -0.01em;
+      border-radius: 999px;
+      border: 1.5px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 2px 12px rgba(0, 70, 255, 0.12);
+    }
+    .xp-toggle-btn:hover {
+      background: var(--accent);
+      color: var(--accent-fg);
+      box-shadow: 0 4px 20px rgba(0, 70, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    .xp-toggle-btn .xp-chevron {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .xp-toggle-btn .xp-chevron svg {
+      width: 16px; height: 16px;
+    }
+    .xp-toggle-btn.open .xp-chevron {
+      transform: rotate(180deg);
+    }
+    .xp-toggle-btn .xp-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .xp-toggle-btn:hover .xp-count {
+      background: white;
+      color: var(--accent);
+    }
+    .xp-toggle-btn.open .xp-count {
+      background: var(--accent-fg);
+      color: var(--accent);
+    }
+
+    /* =================================================================
+       PROJECTS
+       ================================================================= */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 700px) { .project-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1100px) { .project-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .project-card {
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .project-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .project-links { display: flex; gap: 0.5rem; }
+    .project-link {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      border: 1px solid var(--rule);
+      background: var(--surface-2);
+      color: var(--ink-3);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .project-link:hover { border-color: var(--ink); color: var(--ink); }
+    .project-link svg { width: 14px; height: 14px; }
+    .project-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .project-desc {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--ink-3);
+      flex: 1;
+    }
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    /* Coming soon card */
+    .project-card.wip {
+      border-style: dashed;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 8px,
+        var(--grid-line) 8px,
+        var(--grid-line) 9px
+      );
+      opacity: 0.85;
+    }
+    .project-card.wip:hover { border-color: var(--accent); opacity: 1; }
+    .wip-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      font-weight: 600;
+    }
+    .wip-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse-dot 1.4s ease infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .project-feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+    .project-feature-list li {
+      font-size: 0.84rem;
+      color: var(--ink-3);
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .project-feature-list li::before {
+      content: "▸";
+      color: var(--accent);
+      font-size: 0.75em;
+      flex-shrink: 0;
+    }
+
+    /* =================================================================
+       ACTIVE NAV
+       ================================================================= */
+    .nav-links a.active {
+      color: var(--accent);
+    }
+    .nav-links a {
+      position: relative;
+      transition: color 0.15s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+    }
+    .nav-links a.active::after { transform: scaleX(1); }
+
+    /* =================================================================
+       BACK TO TOP
+       ================================================================= */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--accent-fg);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 100;
+      text-decoration: none;
+    }
+    .back-to-top.visible { opacity: 1; transform: translateY(0); }
+    .back-to-top:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .back-to-top svg { width: 18px; height: 18px; }
   </style>
 </head>
 <body>
@@ -735,6 +1039,7 @@
         <div class="nav-links">
           <a href="#now">Now</a>
           <a href="#experience">Work</a>
+          <a href="#projects">Projects</a>
           <a href="#impact">Impact</a>
           <a href="#writing">Writing</a>
           <a href="#contact">Contact</a>
@@ -758,6 +1063,7 @@
   <!--  HERO                                                           -->
   <!-- ============================================================== -->
   <header class="hero wrap" id="top">
+    <div id="hero-vanta"></div>
     <div class="hero-grid">
       <div>
         <span class="hero-eyebrow"><span class="dot"></span>Available for senior roles</span>
@@ -890,66 +1196,163 @@
         </div>
       </article>
 
-      <article class="xp-item reveal">
-        <div class="xp-head">
-          <h3 class="xp-company">Elyadata</h3>
-          <span class="xp-when">Dec 2023 — Jan 2025</span>
-        </div>
-        <p class="xp-role">Data Scientist<span class="sep">·</span>NL-to-SQL platform &amp; LLM inference<span class="sep">·</span>Tunis</p>
-        <ul class="xp-bullets">
-          <li>Engineered the inference microservice on <strong>vLLM + PagedAttention</strong> — <span class="metric">5× throughput</span> over the baseline.</li>
-          <li>Benchmarked 15 open-source LLMs (Llama-2, Mistral, Falcon) on custom SQL generation; selected Mistral-7B with <span class="metric">87% accuracy</span> at <span class="metric">120ms P95</span>.</li>
-          <li>Extended Arabic support: benchmarked AraBART and Jais-13B, fine-tuned <strong>AceGPT-7B</strong> on code-switched data — <span class="metric">91% accuracy</span>.</li>
-          <li>Built <strong>Graph RAG</strong> pipeline: hybrid entity extraction (NER <span class="metric">93% F1</span> + LLM relation extraction) → Neo4j (2M nodes, 5M edges) → Cypher generation at <span class="metric">78% execution success</span>.</li>
-          <li>Implemented <strong>SPLADE</strong> sparse embeddings + hybrid retrieval (dense + BM25 + learned fusion) — <span class="metric">+15% recall</span>.</li>
-          <li>Prototyped Self-RAG, CRAG, and HyDE in the internal research group; filed feature requests on <strong>vLLM</strong> and <strong>SGLang</strong>.</li>
-        </ul>
-        <div class="xp-stack">
-          <span class="stack-tag">Python</span><span class="stack-tag">vLLM</span><span class="stack-tag">PyTorch</span><span class="stack-tag">HuggingFace</span><span class="stack-tag">Neo4j</span><span class="stack-tag">FastAPI</span><span class="stack-tag">Kubernetes</span><span class="stack-tag">SPLADE</span>
-        </div>
-      </article>
+      <!-- ── Show more toggle ── -->
+      <div class="xp-toggle-wrap">
+        <button class="xp-toggle-btn" id="xp-toggle" aria-expanded="false">
+          <span class="xp-count">4</span>
+          <span class="xp-label">Show 4 more roles</span>
+          <span class="xp-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+      </div>
 
-      <article class="xp-item reveal">
-        <div class="xp-head">
-          <h3 class="xp-company">DigeHealth</h3>
-          <span class="xp-when">Feb — Jul 2024</span>
-        </div>
-        <p class="xp-role">Data Scientist (Freelance)<span class="sep">·</span>AI for non-invasive GI diagnostics<span class="sep">·</span>Remote</p>
-        <ul class="xp-bullets">
-          <li>End-to-end audio ML pipeline: denoising, bandpass filtering, segmentation, and 1D-to-2D spectrogram (Mel, log-Mel) transformation. Object detection (<strong>YOLOv5/v8, Faster R-CNN</strong>) for abnormal time-frequency regions, ResNet/EfficientNet classifiers for pathological patterns. MLflow lifecycle, GPU inference optimization, clinical validation with medical experts.</li>
-        </ul>
-        <div class="xp-stack">
-          <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">YOLO</span><span class="stack-tag">MLflow</span><span class="stack-tag">Signal Processing</span>
-        </div>
-      </article>
+      <!-- ── Collapsed entries ── -->
+      <div class="xp-fade" id="xp-fade">
+        <div class="xp-collapsed" id="xp-collapsed">
+          <div style="display:flex;flex-direction:column;gap:1rem;padding-top:1rem;">
 
-      <article class="xp-item reveal">
-        <div class="xp-head">
-          <h3 class="xp-company">Infor</h3>
-          <span class="xp-when">Feb — Aug 2023</span>
-        </div>
-        <p class="xp-role">Machine Learning Intern<span class="sep">·</span>DB-degradation prediction for the M3 ERP<span class="sep">·</span>Tunis</p>
-        <ul class="xp-bullets">
-          <li>Time-series models predicting real database-degradation incidents in multi-tenant SaaS before tenant impact; deployed on <strong>Amazon SageMaker</strong> with real-time endpoints, monitoring, and SHAP/LIME explainability for the SRE team.</li>
-        </ul>
-        <div class="xp-stack">
-          <span class="stack-tag">Python</span><span class="stack-tag">SageMaker</span><span class="stack-tag">XGBoost</span><span class="stack-tag">SHAP</span>
-        </div>
-      </article>
+            <article class="xp-item reveal">
+              <div class="xp-head">
+                <h3 class="xp-company">Elyadata</h3>
+                <span class="xp-when">Dec 2023 — Jan 2025</span>
+              </div>
+              <p class="xp-role">Data Scientist<span class="sep">·</span>NL-to-SQL platform &amp; LLM inference<span class="sep">·</span>Tunis</p>
+              <ul class="xp-bullets">
+                <li>Engineered the inference microservice on <strong>vLLM + PagedAttention</strong> — <span class="metric">5× throughput</span> over the baseline.</li>
+                <li>Benchmarked 15 open-source LLMs (Llama-2, Mistral, Falcon) on custom SQL generation; selected Mistral-7B with <span class="metric">87% accuracy</span> at <span class="metric">120ms P95</span>.</li>
+                <li>Extended Arabic support: benchmarked AraBART and Jais-13B, fine-tuned <strong>AceGPT-7B</strong> on code-switched data — <span class="metric">91% accuracy</span>.</li>
+                <li>Built <strong>Graph RAG</strong> pipeline: hybrid entity extraction (NER <span class="metric">93% F1</span> + LLM relation extraction) → Neo4j (2M nodes, 5M edges) → Cypher generation at <span class="metric">78% execution success</span>.</li>
+                <li>Implemented <strong>SPLADE</strong> sparse embeddings + hybrid retrieval (dense + BM25 + learned fusion) — <span class="metric">+15% recall</span>.</li>
+                <li>Prototyped Self-RAG, CRAG, and HyDE in the internal research group; filed feature requests on <strong>vLLM</strong> and <strong>SGLang</strong>.</li>
+              </ul>
+              <div class="xp-stack">
+                <span class="stack-tag">Python</span><span class="stack-tag">vLLM</span><span class="stack-tag">PyTorch</span><span class="stack-tag">HuggingFace</span><span class="stack-tag">Neo4j</span><span class="stack-tag">FastAPI</span><span class="stack-tag">Kubernetes</span><span class="stack-tag">SPLADE</span>
+              </div>
+            </article>
 
-      <article class="xp-item reveal">
-        <div class="xp-head">
-          <h3 class="xp-company">Omdena</h3>
-          <span class="xp-when">Sep 2021 — Nov 2022</span>
+            <article class="xp-item reveal">
+              <div class="xp-head">
+                <h3 class="xp-company">DigeHealth</h3>
+                <span class="xp-when">Feb — Jul 2024</span>
+              </div>
+              <p class="xp-role">Data Scientist (Freelance)<span class="sep">·</span>AI for non-invasive GI diagnostics<span class="sep">·</span>Remote</p>
+              <ul class="xp-bullets">
+                <li>End-to-end audio ML pipeline: denoising, bandpass filtering, segmentation, and 1D-to-2D spectrogram (Mel, log-Mel) transformation. Object detection (<strong>YOLOv5/v8, Faster R-CNN</strong>) for abnormal time-frequency regions, ResNet/EfficientNet classifiers for pathological patterns. MLflow lifecycle, GPU inference optimization, clinical validation with medical experts.</li>
+              </ul>
+              <div class="xp-stack">
+                <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">YOLO</span><span class="stack-tag">MLflow</span><span class="stack-tag">Signal Processing</span>
+              </div>
+            </article>
+
+            <article class="xp-item reveal">
+              <div class="xp-head">
+                <h3 class="xp-company">Infor</h3>
+                <span class="xp-when">Feb — Aug 2023</span>
+              </div>
+              <p class="xp-role">Machine Learning Intern<span class="sep">·</span>DB-degradation prediction for the M3 ERP<span class="sep">·</span>Tunis</p>
+              <ul class="xp-bullets">
+                <li>Time-series models predicting real database-degradation incidents in multi-tenant SaaS before tenant impact; deployed on <strong>Amazon SageMaker</strong> with real-time endpoints, monitoring, and SHAP/LIME explainability for the SRE team.</li>
+              </ul>
+              <div class="xp-stack">
+                <span class="stack-tag">Python</span><span class="stack-tag">SageMaker</span><span class="stack-tag">XGBoost</span><span class="stack-tag">SHAP</span>
+              </div>
+            </article>
+
+            <article class="xp-item reveal">
+              <div class="xp-head">
+                <h3 class="xp-company">Omdena</h3>
+                <span class="xp-when">Sep 2021 — Nov 2022</span>
+              </div>
+              <p class="xp-role">Machine Learning Engineer<span class="sep">·</span>AI-assisted humanitarian mapping<span class="sep">·</span>Remote</p>
+              <ul class="xp-bullets">
+                <li>Trained <strong>U-Net</strong> and <strong>DeepLabV3+</strong> for building footprint segmentation with transfer learning from RAMP; co-developed <strong>HOTLib</strong>, an open-source library for geospatial preprocessing and inference.</li>
+              </ul>
+              <div class="xp-stack">
+                <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">Image Segmentation</span><span class="stack-tag">Open Source</span>
+              </div>
+            </article>
+
+          </div>
         </div>
-        <p class="xp-role">Machine Learning Engineer<span class="sep">·</span>AI-assisted humanitarian mapping<span class="sep">·</span>Remote</p>
-        <ul class="xp-bullets">
-          <li>Trained <strong>U-Net</strong> and <strong>DeepLabV3+</strong> for building footprint segmentation with transfer learning from RAMP; co-developed <strong>HOTLib</strong>, an open-source library for geospatial preprocessing and inference.</li>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--  PROJECTS                                                       -->
+  <!-- ============================================================== -->
+  <section id="projects" class="section wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-tag"><span class="slash">/</span>PROJECTS</div>
+        <h2 class="section-title">Selected work</h2>
+      </div>
+    </div>
+    <div class="project-grid">
+
+      <!-- Project 1: HR RAG -->
+      <div class="project-card reveal">
+        <div class="project-card-header">
+          <div class="project-links">
+            <a href="https://github.com/JAADARI/HybridRAG_HR_Recommendations" target="_blank" rel="noopener" class="project-link" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.578.688.48C19.138 20.203 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-title">HR Training Recommendation System</div>
+        <ul class="project-feature-list">
+          <li>Hybrid RAG — BM25 + semantic embeddings for precise retrieval</li>
+          <li>Multi-agent architecture — 3 specialized agents + fusion module</li>
+          <li>Structured outputs via Pydantic + Instructor</li>
+          <li>LangGraph DAG orchestration with typed state</li>
+          <li>Single-agent (fast) or multi-agent (precise) modes</li>
         </ul>
-        <div class="xp-stack">
-          <span class="stack-tag">Python</span><span class="stack-tag">PyTorch</span><span class="stack-tag">Image Segmentation</span><span class="stack-tag">Open Source</span>
+        <div class="project-stack">
+          <span class="stack-tag">Python 3.12</span><span class="stack-tag">LangGraph</span><span class="stack-tag">BM25</span><span class="stack-tag">Instructor</span><span class="stack-tag">Pydantic</span><span class="stack-tag">MIT</span>
         </div>
-      </article>
+      </div>
+
+      <!-- Project 2: Anomaly Detection -->
+      <div class="project-card reveal">
+        <div class="project-card-header">
+          <div class="project-links">
+            <a href="https://github.com/JAADARI/infrastructure-anomaly-detection" target="_blank" rel="noopener" class="project-link" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.578.688.48C19.138 20.203 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-title">Infrastructure Anomaly Detection</div>
+        <ul class="project-feature-list">
+          <li>Z-score, Isolation Forest &amp; PCA-Mahalanobis detection</li>
+          <li>Real-time streaming via Apache Kafka + aiokafka</li>
+          <li>LLM-powered actionable recommendations</li>
+          <li>Hybrid: real-time streaming + batch processing</li>
+          <li>Type-safe outputs with Pydantic schema enforcement</li>
+        </ul>
+        <div class="project-stack">
+          <span class="stack-tag">LangGraph</span><span class="stack-tag">Kafka</span><span class="stack-tag">scikit-learn</span><span class="stack-tag">Instructor</span><span class="stack-tag">Pydantic</span>
+        </div>
+      </div>
+
+      <!-- Project 3: Coming soon -->
+      <div class="project-card wip reveal">
+        <div class="project-card-header">
+          <div class="project-links">
+            <span class="wip-badge">In progress</span>
+          </div>
+        </div>
+        <div class="project-title" style="color:var(--ink-3);">Next Project</div>
+        <ul class="project-feature-list" style="opacity:0.6;">
+          <li>Currently in active development</li>
+          <li>Building something new in the LLM space</li>
+          <li>Stay tuned — dropping soon on GitHub</li>
+        </ul>
+        <div class="project-stack" style="opacity:0.5;">
+          <span class="stack-tag">TBA</span>
+        </div>
+      </div>
 
     </div>
   </section>
@@ -1182,6 +1585,17 @@
     </div>
   </footer>
 
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </a>
+
+  <!-- Vanta.js animated background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+
   <!-- ============================================================== -->
   <!--  SCRIPTS                                                        -->
   <!-- ============================================================== -->
@@ -1192,7 +1606,41 @@
       const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
       document.documentElement.dataset.theme = next;
       try { localStorage.setItem('theme', next); } catch (e) {}
+      updateVanta(next);
     });
+
+    // ---------- vanta globe ----------
+    const vantaColors = {
+      light: { color: 0x0046ff, color2: 0x93b4ff, backgroundColor: 0xfafafa },
+      dark:  { color: 0x5b8cff, color2: 0x1a2a4a,  backgroundColor: 0x09090b },
+    };
+    let vantaEffect = null;
+    function initVanta() {
+      if (typeof VANTA === 'undefined') return;
+      const theme = document.documentElement.dataset.theme || 'light';
+      const c = vantaColors[theme];
+      vantaEffect = VANTA.GLOBE({
+        el: '#hero-vanta',
+        mouseControls: false,
+        touchControls: false,
+        gyroControls: false,
+        minHeight: 200,
+        minWidth: 200,
+        scale: 0.7,
+        scaleMobile: 0.5,
+        color: c.color,
+        color2: c.color2,
+        size: 0.8,
+        backgroundColor: c.backgroundColor,
+      });
+    }
+    function updateVanta(theme) {
+      if (!vantaEffect) return;
+      const c = vantaColors[theme] || vantaColors.light;
+      vantaEffect.setOptions({ color: c.color, color2: c.color2, backgroundColor: c.backgroundColor });
+    }
+    // init after scripts load
+    window.addEventListener('load', initVanta);
 
     // ---------- nav border on scroll ----------
     const nav = document.getElementById('nav');
@@ -1237,6 +1685,43 @@
       });
     }, { threshold: 0.4 });
     document.querySelectorAll('.stat-num').forEach((el) => statObs.observe(el));
+
+    // ---------- experience show more ----------
+    const xpToggle = document.getElementById('xp-toggle');
+    const xpCollapsed = document.getElementById('xp-collapsed');
+    const xpFade = document.getElementById('xp-fade');
+    const xpLabel = xpToggle.querySelector('.xp-label');
+    xpToggle.addEventListener('click', () => {
+      const isOpen = xpCollapsed.classList.toggle('open');
+      xpFade.classList.toggle('open', isOpen);
+      xpToggle.classList.toggle('open', isOpen);
+      xpToggle.setAttribute('aria-expanded', isOpen);
+      xpLabel.textContent = isOpen ? 'Show less' : 'Show 4 more roles';
+      if (isOpen) {
+        // trigger reveal animations for newly visible cards
+        xpCollapsed.querySelectorAll('.reveal:not(.visible)').forEach((el) => ro.observe(el));
+      }
+    });
+
+    // ---------- active nav highlight ----------
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          navLinks.forEach((a) => a.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' });
+    sections.forEach((s) => sectionObs.observe(s));
+
+    // ---------- back to top ----------
+    const btt = document.getElementById('back-to-top');
+    const toggleBtt = () => btt.classList.toggle('visible', window.scrollY > 400);
+    document.addEventListener('scroll', toggleBtt, { passive: true });
+    toggleBtt();
   </script>
 </body>
 </html>
