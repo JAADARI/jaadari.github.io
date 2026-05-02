@@ -10,11 +10,26 @@
   <meta property="og:title" content="Firas Jaadari — Senior AI / ML Engineer" />
   <meta property="og:description" content="Building production LLM systems — RAG, agents, fine-tuning, inference optimization." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/photo.webp" />
+  <meta property="og:url" content="https://jaadari.github.io" />
+  <meta property="og:image" content="https://jaadari.github.io/assets/og-cover.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Firas Jaadari" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Firas Jaadari — Senior AI / ML Engineer" />
+  <meta name="twitter:description" content="Building production LLM systems — RAG, agents, fine-tuning, inference optimization." />
+  <meta name="twitter:image" content="https://jaadari.github.io/assets/og-cover.svg" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2" />
   <link rel="shortcut icon" href="assets/favicon.svg?v=2" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+  <!-- Plausible Analytics (privacy-friendly, no cookie banner needed) -->
+  <script defer data-domain="jaadari.github.io" src="https://plausible.io/js/script.js"></script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -109,8 +124,21 @@
       font-size: 15px;
       line-height: 1.55;
       letter-spacing: -0.005em;
-      transition: background 0.25s ease, color 0.25s ease;
+      transition: background 0.4s ease, color 0.4s ease;
       overflow-x: hidden;
+    }
+
+    /* Smooth theme transition — all surfaces, borders, text */
+    *, *::before, *::after {
+      transition-property: background-color, border-color, color, box-shadow, opacity;
+      transition-duration: 0.35s;
+      transition-timing-function: ease;
+    }
+    /* But don't slow down interaction animations */
+    *:hover, button, a, input, [class*="btn"], [class*="reveal"], [class*="card"],
+    .hamburger span, .nav-links a::after, .tech-pill, .xp-toggle-btn,
+    .back-to-top, .progress-bar, .mobile-nav {
+      transition-duration: inherit;
     }
     a { color: inherit; text-decoration: none; }
     ul, ol { list-style: none; }
@@ -154,6 +182,18 @@
       transition: border-color 0.25s ease;
     }
     .nav.scrolled { border-bottom-color: var(--rule); }
+
+    /* Reading progress bar */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 100;
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
+    }
     .nav-inner {
       display: flex;
       align-items: center;
@@ -198,6 +238,82 @@
       transition: color 0.15s ease, background 0.15s ease;
     }
     .nav-links a:hover { color: var(--ink); background: var(--surface-2); }
+
+    /* ── Hamburger button (mobile only) ─────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      border: 1px solid var(--rule);
+      background: var(--surface-1);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    @media (max-width: 759px) { .hamburger { display: flex; } }
+    .hamburger:hover { border-color: var(--rule-strong); background: var(--surface-2); }
+    .hamburger span {
+      display: block;
+      width: 16px; height: 1.5px;
+      background: var(--ink-2);
+      border-radius: 2px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, width 0.25s ease;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── Mobile nav dropdown panel ───────────────────────────────── */
+    .mobile-nav {
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: color-mix(in srgb, var(--bg) 97%, transparent);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      border-bottom: 1px solid var(--rule);
+      z-index: 48;
+      padding: 0.5rem 0 1rem;
+      transform: translateY(-6px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0s linear 0.25s;
+    }
+    .mobile-nav.open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0s linear 0s;
+    }
+    @media (min-width: 760px) { .mobile-nav { display: none !important; } }
+    .mobile-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem clamp(1.25rem, 4vw, 2.5rem);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink-2);
+      border-left: 2px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .mobile-nav a:hover, .mobile-nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .mobile-nav-num {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--ink-4);
+      min-width: 18px;
+    }
 
     .icon-btn {
       width: 36px; height: 36px;
@@ -568,6 +684,59 @@
     }
 
     /* =================================================================
+       TECH STRIP (marquee logos row)
+       ================================================================= */
+    .tech-strip-wrap {
+      margin: -0.5rem 0 2.5rem;
+      overflow: hidden;
+      position: relative;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+    .tech-track {
+      display: flex;
+      gap: 0.6rem;
+      width: max-content;
+      animation: tech-marquee 32s linear infinite;
+    }
+    .tech-strip-wrap:hover .tech-track { animation-play-state: paused; }
+    @keyframes tech-marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--surface-1);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--ink-2);
+      white-space: nowrap;
+      cursor: default;
+      transition: border-color 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, color 0.15s ease;
+      user-select: none;
+    }
+    .tech-pill:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 18%, transparent);
+      color: var(--ink);
+    }
+    .tech-pill img {
+      width: 16px; height: 16px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .tech-pill img {
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+    }
+
+    /* =================================================================
        SKILLS
        ================================================================= */
     .skill-grid {
@@ -583,9 +752,13 @@
       border: 1px solid var(--rule);
       border-radius: 10px;
       padding: 1.25rem;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
-    .skill-card:hover { border-color: var(--rule-strong); }
+    .skill-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 12%, transparent);
+      transform: translateY(-2px);
+    }
     .skill-card h3 {
       font-family: 'Geist Mono', monospace;
       font-size: 0.72rem;
@@ -728,7 +901,7 @@
        FOOTER
        ================================================================= */
     footer {
-      padding-block: 2rem;
+      padding-block: 2.5rem;
       border-top: 1px solid var(--rule);
       font-family: 'Geist Mono', monospace;
       font-size: 0.72rem;
@@ -737,11 +910,61 @@
     .foot-inner {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
     }
-    footer a { color: var(--ink-3); }
-    footer a:hover { color: var(--accent); }
+    .foot-left { display: flex; flex-direction: column; gap: 0.35rem; }
+    .foot-copy { color: var(--ink-3); font-weight: 500; }
+    .foot-built {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--ink-4);
+    }
+    .foot-built a { color: var(--ink-4); transition: color 0.15s ease; }
+    .foot-built a:hover { color: var(--accent); }
+    .foot-heart {
+      color: #f43f5e;
+      display: inline-block;
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14%       { transform: scale(1.25); }
+      28%       { transform: scale(1); }
+      42%       { transform: scale(1.15); }
+      56%       { transform: scale(1); }
+    }
+    .foot-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .foot-right a {
+      color: var(--ink-4);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.15s ease, transform 0.2s ease;
+    }
+    .foot-right a:hover { color: var(--accent); transform: translateY(-1px); }
+    .foot-right svg { width: 13px; height: 13px; }
+    .foot-back {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      color: var(--ink-4) !important;
+      transition: border-color 0.15s ease, color 0.15s ease, transform 0.2s ease !important;
+    }
+    .foot-back:hover {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
+      transform: translateY(-2px) !important;
+    }
 
     /* =================================================================
        REVEAL
@@ -872,13 +1095,14 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
       position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
     .project-card:hover {
       border-color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 8px 32px color-mix(in srgb, var(--accent) 18%, transparent), var(--shadow-md);
     }
     .project-card-header {
       display: flex;
@@ -1025,6 +1249,119 @@
     .back-to-top.visible { opacity: 1; transform: translateY(0); }
     .back-to-top:hover { filter: brightness(1.1); transform: translateY(-2px); }
     .back-to-top svg { width: 18px; height: 18px; }
+
+    /* Copy email button — magnetic liquid fill hover */
+    .btn-copy {
+      position: relative;
+      overflow: hidden;
+      min-width: 220px;
+      justify-content: center;
+      isolation: isolate;
+      transition: color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.18s ease;
+    }
+
+    /* Liquid blob that expands on hover */
+    .btn-copy::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      border-radius: inherit;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+      z-index: 0;
+    }
+    .btn-copy:hover::before {
+      transform: scaleX(1);
+    }
+
+    /* Ripple ring that pulses on hover */
+    .btn-copy::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: inherit;
+      border: 2px solid var(--accent);
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 0;
+    }
+    .btn-copy:hover::after {
+      opacity: 0.55;
+      transform: scale(1.06);
+    }
+
+    .btn-copy:hover {
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 40%, transparent);
+      transform: translateY(-2px) scale(1.025);
+    }
+    .btn-copy:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-copy .btn-default-content,
+    .btn-copy .btn-copied-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    /* Envelope icon bounce on hover */
+    .btn-copy:hover .btn-default-content svg {
+      animation: envelope-bounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes envelope-bounce {
+      0%   { transform: translateY(0) rotate(0deg); }
+      30%  { transform: translateY(-5px) rotate(-8deg); }
+      60%  { transform: translateY(2px) rotate(4deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Shimmer text effect on hover */
+    .btn-copy:hover .btn-default-content {
+      background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.7) 50%, #fff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer-text 1.2s linear infinite;
+    }
+    @keyframes shimmer-text {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    .btn-copy .btn-copied-content {
+      position: absolute;
+      opacity: 0;
+      transform: translateY(10px);
+      color: #22c55e;
+      z-index: 1;
+    }
+    .btn-copy.copied .btn-default-content {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    .btn-copy.copied .btn-copied-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .btn-copy.copied {
+      border-color: #22c55e !important;
+      background: rgba(34, 197, 94, 0.08) !important;
+      box-shadow: 0 8px 30px rgba(34, 197, 94, 0.25) !important;
+      transform: translateY(-2px) !important;
+    }
+    .btn-copy.copied::before {
+      transform: scaleX(0) !important;
+    }
   </style>
 </head>
 <body>
@@ -1032,6 +1369,8 @@
   <!-- ============================================================== -->
   <!--  NAV                                                            -->
   <!-- ============================================================== -->
+  <div class="progress-bar" id="progress-bar"></div>
+
   <nav class="nav" id="nav">
     <div class="wrap nav-inner">
       <a href="#top" class="nav-mark"><span class="pulse"></span>firas.jaadari</a>
@@ -1055,9 +1394,22 @@
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </nav>
+
+  <!-- Mobile nav dropdown (outside <nav> so it slides below it) -->
+  <div class="mobile-nav" id="mobile-nav" role="dialog" aria-label="Navigation menu">
+    <a href="#now"        class="mobile-nav-link"><span class="mobile-nav-num">01</span>Now</a>
+    <a href="#experience" class="mobile-nav-link"><span class="mobile-nav-num">02</span>Work</a>
+    <a href="#projects"   class="mobile-nav-link"><span class="mobile-nav-num">03</span>Projects</a>
+    <a href="#impact"     class="mobile-nav-link"><span class="mobile-nav-num">04</span>Impact</a>
+    <a href="#writing"    class="mobile-nav-link"><span class="mobile-nav-num">05</span>Writing</a>
+    <a href="#contact"    class="mobile-nav-link"><span class="mobile-nav-num">06</span>Contact</a>
+  </div>
 
   <!-- ============================================================== -->
   <!--  HERO                                                           -->
@@ -1421,6 +1773,38 @@
         <h2 class="section-title">Tools &amp; expertise</h2>
       </div>
     </div>
+
+    <!-- Scrolling tech logos strip -->
+    <div class="tech-strip-wrap reveal">
+      <div class="tech-track" id="tech-track">
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/python/3776AB" alt="">Python</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/pytorch/EE4C2C" alt="">PyTorch</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/huggingface/FFD21E" alt="">HuggingFace</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/langchain/000000" alt="">LangChain</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/fastapi/009688" alt="">FastAPI</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/amazonaws/FF9900" alt="">AWS</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="">Docker</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/kubernetes/326CE5" alt="">Kubernetes</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/neo4j/008CC1" alt="">Neo4j</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="">Terraform</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/grafana/F46800" alt="">Grafana</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/mlflow/0194E2" alt="">MLflow</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/python/3776AB" alt="">Python</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/pytorch/EE4C2C" alt="">PyTorch</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/huggingface/FFD21E" alt="">HuggingFace</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/langchain/000000" alt="">LangChain</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/fastapi/009688" alt="">FastAPI</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/amazonaws/FF9900" alt="">AWS</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="">Docker</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/kubernetes/326CE5" alt="">Kubernetes</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/neo4j/008CC1" alt="">Neo4j</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="">Terraform</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/grafana/F46800" alt="">Grafana</span>
+        <span class="tech-pill"><img src="https://cdn.simpleicons.org/mlflow/0194E2" alt="">MLflow</span>
+      </div>
+    </div>
+
     <div class="skill-grid">
       <div class="skill-card reveal">
         <h3>LLM &amp; Agents</h3>
@@ -1568,7 +1952,16 @@
       <h2>Let's <span class="accent">build</span> something.</h2>
       <p>Open to senior LLM / Generative AI roles in Paris, Nantes, or remote. Always happy to talk shop about RAG quality, agent design, inference economics — or anything LLM-systems-flavored.</p>
       <div class="contact-links">
-        <a href="mailto:jaadari.firas99@gmail.com" class="btn primary">Email me</a>
+        <button class="btn primary btn-copy" id="copy-email-btn" onclick="copyEmail(this)">
+          <span class="btn-default-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            jaadari.firas99@gmail.com
+          </span>
+          <span class="btn-copied-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>
+            Copied to clipboard!
+          </span>
+        </button>
         <a href="https://www.linkedin.com/in/jaadarix/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
         <a href="https://github.com/JAADARI" target="_blank" rel="noopener" class="btn">GitHub</a>
       </div>
@@ -1580,8 +1973,27 @@
   <!-- ============================================================== -->
   <footer class="wrap">
     <div class="foot-inner">
-      <span>© 2026 Firas Jaadari</span>
-      <span><a href="#top">↑ back to top</a></span>
+      <div class="foot-left">
+        <span class="foot-copy">© <span id="foot-year"></span> Firas Jaadari</span>
+        <span class="foot-built">
+          Built with <span class="foot-heart">♥</span> &amp; pure HTML/CSS/JS ·
+          <a href="https://github.com/JAADARI/JAADARI.github.io" target="_blank" rel="noopener">view source</a>
+        </span>
+      </div>
+      <div class="foot-right">
+        <a href="https://www.linkedin.com/in/jaadarix/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/JAADARI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="#top" class="foot-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+          Top
+        </a>
+      </div>
     </div>
   </footer>
 
@@ -1712,6 +2124,10 @@
           navLinks.forEach((a) => a.classList.remove('active'));
           const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
           if (active) active.classList.add('active');
+          // also sync mobile nav
+          document.querySelectorAll('.mobile-nav-link').forEach(a => a.classList.remove('active'));
+          const mActive = document.querySelector(`.mobile-nav-link[href="#${e.target.id}"]`);
+          if (mActive) mActive.classList.add('active');
         }
       });
     }, { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' });
@@ -1722,6 +2138,92 @@
     const toggleBtt = () => btt.classList.toggle('visible', window.scrollY > 400);
     document.addEventListener('scroll', toggleBtt, { passive: true });
     toggleBtt();
+
+    // ---------- reading progress bar ----------
+    const progressBar = document.getElementById('progress-bar');
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    };
+    document.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // ---------- footer year ----------
+    const footYear = document.getElementById('foot-year');
+    if (footYear) footYear.textContent = new Date().getFullYear();
+
+    // ---------- copy email ----------
+    function copyEmail(btn) {
+      navigator.clipboard.writeText('jaadari.firas99@gmail.com').then(() => {
+        btn.classList.add('copied');
+        setTimeout(() => btn.classList.remove('copied'), 2500);
+      });
+    }
+
+    // ---------- hamburger / mobile nav ----------
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close on link click
+    mobileLinks.forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Close on outside click / escape
+    document.addEventListener('click', e => {
+      if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !hamburger.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Sync mobile nav active highlight with desktop
+    const mobileLinkMap = {};
+    mobileLinks.forEach(a => { mobileLinkMap[a.getAttribute('href')] = a; });
+    const origSectionObs = sectionObs; // reuse below
+
+    // ---------- 3D card tilt ----------
+    document.querySelectorAll('.project-card:not(.wip)').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(700px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateZ(8px)`;
+      });
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'border-color 0.2s ease, box-shadow 0.2s ease';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease';
+        card.style.transform = '';
+        setTimeout(() => { card.style.transition = ''; }, 500);
+      });
+    });
   </script>
 </body>
 </html>

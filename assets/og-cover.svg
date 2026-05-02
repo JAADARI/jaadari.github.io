@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#0046ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#09090b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="topline" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#0046ff" stop-opacity="0"/>
+      <stop offset="35%"  stop-color="#5b8cff"/>
+      <stop offset="65%"  stop-color="#0046ff"/>
+      <stop offset="100%" stop-color="#0046ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#09090b"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#topline)"/>
+  <!-- Bottom accent line -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#topline)"/>
+
+  <!-- Available badge — top center -->
+  <rect x="540" y="80" width="120" height="28" rx="14" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+  <circle cx="559" cy="94" r="4" fill="#10b981"/>
+  <text x="572" y="99" font-family="ui-monospace,monospace" font-size="12" fill="#10b981" font-weight="600">Available</text>
+
+  <!-- Name — centered, very large -->
+  <text x="600" y="255" font-family="system-ui,-apple-system,BlinkMacSystemFont,sans-serif" font-size="96" font-weight="700" fill="#fafafa" letter-spacing="-4" text-anchor="middle">Firas Jaadari</text>
+
+  <!-- Title — centered, accent color -->
+  <text x="600" y="316" font-family="ui-monospace,monospace" font-size="26" fill="#5b8cff" text-anchor="middle" letter-spacing="0.5">Senior AI / ML Engineer</text>
+
+  <!-- Thin divider -->
+  <rect x="480" y="342" width="240" height="1" fill="#27272a"/>
+
+  <!-- Description — centered, muted -->
+  <text x="600" y="384" font-family="system-ui,-apple-system,sans-serif" font-size="20" fill="#71717a" text-anchor="middle">RAG · Agents · Fine-tuning · Inference · LLM Systems</text>
+
+  <!-- Meta row — centered -->
+  <text x="600" y="458" font-family="ui-monospace,monospace" font-size="15" fill="#52525b" text-anchor="middle">Anywhere in France 🇫🇷  ·  Remote / Hybrid  ·  Senior level</text>
+
+  <!-- URL — bottom center -->
+  <text x="600" y="560" font-family="ui-monospace,monospace" font-size="15" fill="#3f3f46" text-anchor="middle">jaadari.github.io</text>
+</svg>
